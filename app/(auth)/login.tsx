@@ -13,8 +13,12 @@ import { HeaderUserActions } from "../../components/HeaderUserActions";
 import { FormText } from "../../components/FormText";
 import { GoogleBtn } from "../../components/GoogleBtn";
 import { Button } from "../../components/Btn";
+import { useState } from "react";
+import Entypo from "@expo/vector-icons/Entypo";
 
 export default function LoginScreen() {
+  const [rememberMe, setRememberMe] = useState(false);
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <ScrollView
@@ -31,8 +35,13 @@ export default function LoginScreen() {
           <FormText label="EMAIL" placeholder="example@gmail.com" />
           <FormText label="PASSWORD" placeholder="••••••••" />
           <View style={styles.footerContainer}>
-            <TouchableOpacity style={styles.rememberMe}>
-              <View style={styles.checkbox}></View>
+            <TouchableOpacity
+              style={styles.rememberMe}
+              onPress={() => setRememberMe(!rememberMe)}
+            >
+              <View style={styles.checkbox}>
+                {rememberMe && <Entypo name="check" size={18} color="white" />}
+              </View>
               <Text style={styles.remeberMeText}>Remember me</Text>
             </TouchableOpacity>
             <TouchableOpacity>
@@ -40,7 +49,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          <GoogleBtn />
+          <GoogleBtn text="LOG IN WITH GOOGLE" />
           <Button title="LOG IN" onPress={() => {}} />
         </View>
 
@@ -88,6 +97,9 @@ const styles = StyleSheet.create({
     marginRight: 8,
     borderColor: Colors.dark.text,
     borderWidth: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   remeberMeText: {
     color: Colors.dark.textMuted,

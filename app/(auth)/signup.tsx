@@ -1,5 +1,4 @@
 import {
-  Text,
   View,
   StyleSheet,
   TouchableOpacity,
@@ -8,12 +7,12 @@ import {
 } from "react-native";
 import { Colors } from "../../constants/theme";
 import { Link } from "expo-router";
+import Entypo from "@expo/vector-icons/Entypo";
 
 import { HeaderUserActions } from "../../components/HeaderUserActions";
 import { FormText } from "../../components/FormText";
 import { GoogleBtn } from "../../components/GoogleBtn";
 import { Button } from "../../components/Btn";
-import Entypo from "@expo/vector-icons/Entypo";
 
 export default function SingUpScreen() {
   return (
@@ -34,21 +33,12 @@ export default function SingUpScreen() {
         />
 
         <View style={styles.formContainer}>
+          <GoogleBtn text="SIGN UP WITH GOOGLE" action="signUp" />
           <FormText label="USERNAME" placeholder="John Doe" />
           <FormText label="EMAIL" placeholder="example@gmail.com" />
           <FormText label="PASSWORD" placeholder="••••••••" />
           <FormText label="CONFIRM PASSWORD" placeholder="••••••••" />
-          <View style={styles.footerContainer}>
-            <TouchableOpacity style={styles.rememberMe}>
-              <View style={styles.checkbox}></View>
-              <Text style={styles.remeberMeText}>Remember me</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.forgotText}>Forgot Password</Text>
-            </TouchableOpacity>
-          </View>
 
-          <GoogleBtn />
           <Button title="SIGN UP" onPress={() => {}} />
         </View>
       </ScrollView>
@@ -79,7 +69,7 @@ const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
     gap: 20,
-    marginBottom: 30,
+    marginBottom: 150,
   },
 
   footerContainer: {

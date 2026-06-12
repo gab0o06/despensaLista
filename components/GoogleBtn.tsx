@@ -1,11 +1,34 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import { Colors } from "../constants/theme";
+import { makeRedirectUri } from "expo-auth-session";
 
-export const GoogleBtn = () => {
+import { GoogleAuthProvider } from "firebase/auth";
+import * as Google from "expo-auth-session/providers/google";
+import { auth, db, provider } from "../utils/firebase";
+
+interface GoogleBtnProps {
+  text?: string;
+  action?: "signIn" | "signUp";
+}
+
+export const GoogleBtn = ({ text, action }: GoogleBtnProps) => {
+  const [req, res, promptAsync] = Google.useAuthRequest({
+    androidClientId: process.env.EXPO_PUBLIC_ANDROID_ID,
+    webClientId: process.env.EXPO_PUBLIC_WEB_ID,
+    redirectUri: makeRedirectUri({
+      scheme: "com.dispensalista.app",
+    }),
+  });
   return (
-    <TouchableOpacity style={styles.googleBtn}>
-      <Text style={styles.googleBtnText}>LOG IN CON GOOGLE</Text>
+    <TouchableOpacity
+      style={styles.googleBtn}
+      activeOpacity={0.5}
+      onPress={() => {
+        promptAsync().catch((err) => console.log(err));
+      }}
+    >
+      <Text style={styles.googleBtnText}>{text}</Text>
       <Image
         source={require("../assets/googleIcon.svg")}
         style={styles.googleBtnIcon}

@@ -1,6 +1,13 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Colors } from "../constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useState } from "react";
 
 interface FormTextProps {
   label?: "EMAIL" | "USERNAME" | "PASSWORD" | "CONFIRM PASSWORD";
@@ -8,17 +15,34 @@ interface FormTextProps {
 }
 
 export const FormText = ({ label, placeholder }: FormTextProps) => {
+  const [active, setActive] = useState(false);
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.inputLabel}>{label}</Text>
       <View style={styles.inputTextContainer}>
         <TextInput
           placeholder={placeholder}
+          secureTextEntry={
+            label === "PASSWORD" || label === "CONFIRM PASSWORD"
+              ? !active
+              : false
+          }
           style={styles.inputText}
           placeholderTextColor={Colors.dark.textMuted}
         />
         {label === "PASSWORD" || label === "CONFIRM PASSWORD" ? (
-          <Ionicons name="eye" size={24} color={Colors.dark.textMuted} />
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              setActive(!active);
+            }}
+          >
+            <Ionicons
+              name={active ? "eye" : "eye-off"}
+              size={24}
+              color={Colors.dark.textMuted}
+            />
+          </TouchableOpacity>
         ) : null}
       </View>
     </View>
@@ -44,6 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   inputText: {
+    flex: 1,
     color: Colors.dark.text,
     fontFamily: "Sen_400Regular",
     fontSize: 16,
