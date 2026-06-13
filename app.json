@@ -2,8 +2,8 @@
   "expo": {
     "name": "despensa",
     "slug": "despensa",
-    "version": "1.0.0",
     "scheme": "despensalista",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,15 +14,27 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "bundleIdentifier": "com.dispensalista.app",
+      "bundleIdentifier": "com.despensalista.app",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.dispensalista.app",
+      "package": "com.despensalista.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "despensalista"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
@@ -31,7 +43,12 @@
     },
     "plugins": [
       "expo-font",
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": "https://despensalista.app"
+        }
+      ],
       "expo-splash-screen"
     ],
     "extra": {
@@ -39,6 +56,9 @@
       "eas": {
         "projectId": "6e8c8070-f7fd-4f0a-9d9c-13016fd73b33"
       }
+    },
+    "expo": {
+      "newArchEnabled": false // 👈 cambia a false
     }
   }
 }

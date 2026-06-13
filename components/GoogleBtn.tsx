@@ -1,11 +1,16 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Image } from "expo-image";
-import { Colors } from "../constants/theme";
 import { makeRedirectUri } from "expo-auth-session";
+import { useEffect } from "react";
+import { router } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
 
-import { GoogleAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
-import { auth, db, provider } from "../utils/firebase";
+import { auth, db } from "../utils/firebase";
+import { Colors } from "../constants/theme";
+
+WebBrowser.maybeCompleteAuthSession();
 
 interface GoogleBtnProps {
   text?: string;
@@ -16,14 +21,36 @@ export const GoogleBtn = ({ text, action }: GoogleBtnProps) => {
   const [req, res, promptAsync] = Google.useAuthRequest({
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_ID,
     webClientId: process.env.EXPO_PUBLIC_WEB_ID,
-    redirectUri: makeRedirectUri({
-      scheme: "com.dispensalista.app",
-    }),
   });
+
+  console.log(makeRedirectUri({ scheme: "despensalista" }));
+
+  // useEffect(() => {
+  //   if (res?.type === "success") {
+  //     const { id_token } = res.params;
+  //     const credential = GoogleAuthProvider.credential(id_token);
+
+  //     signInWithCredential(auth, credential)
+  //       .then((userCredential) => {
+  //         const user = userCredential.user;
+  //         console.log("Google Sign-In successful:", user);
+  //         router.replace("/(tabs)");
+  //       })
+  //       .catch((error) => {
+  //         console.error("Google Sign-In error:", error);
+  //       });
+  //   }
+  // }, [res]);
+
+  useEffect(() => {
+    console.log("res:", JSON.stringify(res, null, 2));
+  }, [res]);
+
   return (
     <TouchableOpacity
       style={styles.googleBtn}
       activeOpacity={0.5}
+      disabled={!req}
       onPress={() => {
         promptAsync().catch((err) => console.log(err));
       }}
