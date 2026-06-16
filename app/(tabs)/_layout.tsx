@@ -36,14 +36,14 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="cart"
+        name="myShops"
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.floatingButton}>
               <Feather name="shopping-cart" size={30} color="white" />
             </View>
           ),
-          tabBarAccessibilityLabel: "Cart Tab",
+          tabBarAccessibilityLabel: "My Shops Tab",
         }}
         listeners={() => ({
           tabPress: () => {

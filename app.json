@@ -16,6 +16,7 @@
     "ios": {
       "bundleIdentifier": "com.despensalista.app",
       "supportsTablet": true
+      // "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "package": "com.despensalista.app",
@@ -23,18 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "autoVerify": true,
-          "data": [
-            {
-              "scheme": "despensalista"
-            }
-          ],
-          "category": ["BROWSABLE", "DEFAULT"]
-        }
-      ],
+      "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
@@ -43,22 +33,15 @@
     },
     "plugins": [
       "expo-font",
-      [
-        "expo-router",
-        {
-          "origin": "https://despensalista.app"
-        }
-      ],
-      "expo-splash-screen"
+      "expo-router",
+      "expo-splash-screen",
+      "@react-native-google-signin/google-signin"
     ],
     "extra": {
       "router": {},
       "eas": {
         "projectId": "6e8c8070-f7fd-4f0a-9d9c-13016fd73b33"
       }
-    },
-    "expo": {
-      "newArchEnabled": false // 👈 cambia a false
     }
   }
 }

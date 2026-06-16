@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 
-export default function Profile() {
+export default function myShops() {
   return (
     <View>
-      <Text>Cart Screen</Text>
+      <Text>My Shops Screen</Text>
     </View>
   );
 }

@@ -49,7 +49,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          <GoogleBtn text="LOG IN WITH GOOGLE" />
+          <GoogleBtn text="LOG IN WITH GOOGLE" action="login" />
           <Button title="LOG IN" onPress={() => {}} />
         </View>
 
