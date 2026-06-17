@@ -10,7 +10,14 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 
 interface FormTextProps {
-  label?: "EMAIL" | "USERNAME" | "PASSWORD" | "CONFIRM PASSWORD";
+  label?:
+    | "EMAIL"
+    | "USERNAME"
+    | "PASSWORD"
+    | "CONFIRM PASSWORD"
+    | "NAME"
+    | "CATEGORY"
+    | "DESCRIPTION";
   placeholder?: string;
 }
 
@@ -27,7 +34,12 @@ export const FormText = ({ label, placeholder }: FormTextProps) => {
               ? !active
               : false
           }
-          style={styles.inputText}
+          style={[
+            styles.inputText,
+            (label === "DESCRIPTION" && styles.descriptionChange) || {},
+          ]}
+          multiline={label === "DESCRIPTION"}
+          textAlignVertical={label === "DESCRIPTION" ? "top" : "center"}
           placeholderTextColor={Colors.dark.textMuted}
         />
         {label === "PASSWORD" || label === "CONFIRM PASSWORD" ? (
@@ -72,5 +84,8 @@ const styles = StyleSheet.create({
     color: Colors.dark.text,
     fontFamily: "Sen_400Regular",
     fontSize: 16,
+  },
+  descriptionChange: {
+    height: 120,
   },
 });
