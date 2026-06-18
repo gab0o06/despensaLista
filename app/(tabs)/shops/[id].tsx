@@ -1,10 +1,25 @@
-import { View, StyleSheet, Text, TextInput } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Entypo } from "@expo/vector-icons";
+import { useRouter, useFocusEffect } from "expo-router";
+
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { Colors } from "../../../constants/theme";
-import { Entypo, Fontisto } from "@expo/vector-icons";
 import { SearchInput } from "../../../components/SearchInput";
+import { ItemShop } from "../../../components/ItemShop";
+import { useCallback, useState } from "react";
 
 export default function ShopTemplateInfo() {
+  const route = useRouter();
+  const [activeMoreFunctions, setActiveMoreFunctions] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setActiveMoreFunctions(false);
+
+      return () => {};
+    }, []),
+  );
+
   return (
     <View style={styles.body}>
       <HeaderShopsBack />
@@ -20,14 +35,45 @@ export default function ShopTemplateInfo() {
               <Text style={styles.descShop}>Ult. Actualización: 3 min</Text>
             </View>
           </View>
-          <View style={styles.actionDots}>
+          <TouchableOpacity
+            style={styles.actionDots}
+            activeOpacity={0.7}
+            onPress={() => setActiveMoreFunctions(!activeMoreFunctions)}
+          >
             <Entypo name="dots-three-horizontal" size={16} color="white" />
-          </View>
+          </TouchableOpacity>
+          {activeMoreFunctions && (
+            <View style={styles.moreFunctionsContainer}>
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  backgroundColor: Colors.dark.accent,
+                  borderRadius: 8,
+                  marginBottom: 10,
+                }}
+                onPress={() => route.push("/(tabs)/shops/edit")}
+              >
+                <Entypo name="pencil" size={24} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: Colors.dark.error,
+                  borderRadius: 8,
+                  padding: 10,
+                }}
+                onPress={() => route.push("/(tabs)/shops/delete")}
+              >
+                <Entypo name="trash" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         <View style={{ gap: 20 }}>
           <View style={styles.categoriesContainer}>
             <View style={[styles.categoryItem, styles.activeCategoryItem]}>
-              <Text style={styles.categoryText}>Todos</Text>
+              <Text style={[styles.categoryText, styles.activeCategoryText]}>
+                Todos
+              </Text>
             </View>
             <View style={styles.categoryItem}>
               <Text style={styles.categoryText}>Carne</Text>
@@ -40,6 +86,14 @@ export default function ShopTemplateInfo() {
             </View>
           </View>
           <SearchInput placeholder="Search" />
+        </View>
+        <View style={{ marginVertical: 20 }}>
+          <ItemShop
+            category="Todos"
+            name="Producto 1"
+            units="kg"
+            quantity={3}
+          />
         </View>
       </View>
     </View>
@@ -108,5 +162,15 @@ const styles = StyleSheet.create({
     color: Colors.dark.success,
     backgroundColor: "#D9D9D922",
     borderColor: Colors.dark.success,
+  },
+  activeCategoryText: {
+    color: Colors.dark.success,
+  },
+  moreFunctionsContainer: {
+    position: "absolute",
+    top: 40,
+    right: 0,
+    borderRadius: 8,
+    zIndex: 10,
   },
 });
