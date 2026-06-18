@@ -6,6 +6,7 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import { SeeAllBtn } from "../../components/SeeAllbtn";
 import { TodayActivity } from "../../components/TodayActivity";
 import { ShopCategory } from "../../components/ShopCategory";
+import { SearchInput } from "../../components/SearchInput";
 
 export default function HomeScreen() {
   return (
@@ -34,19 +35,7 @@ export default function HomeScreen() {
             <Text style={{ color: Colors.dark.accent }}>Hi</Text> USER, Good
             Afternoon!
           </Text>
-          <View style={styles.searchContainer}>
-            <Fontisto
-              name="search"
-              size={24}
-              color="white"
-              // style={{ marginLeft: 15 }}
-            />
-            <TextInput
-              placeholder="Search Shop and Activities"
-              style={styles.searchInput}
-              placeholderTextColor={Colors.dark.textMuted}
-            />
-          </View>
+          <SearchInput placeholder="Search Shop and Activities" />
         </View>
         <View>
           <View style={[styles.shop, styles.paddingScreen]}>
@@ -117,22 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.dark.text,
   },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    backgroundColor: Colors.dark.search,
-    borderRadius: 8,
-    gap: 10,
-    paddingHorizontal: 15,
-    overflow: "scroll",
-  },
-  searchInput: {
-    flex: 1,
-    color: Colors.dark.text,
-    borderRadius: 8,
-    paddingVertical: 10,
-  },
+
   shop: {
     flexDirection: "row",
     justifyContent: "space-between",

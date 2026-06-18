@@ -1,10 +1,16 @@
 import Entypo from "@expo/vector-icons/Entypo";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { Colors } from "../constants/theme";
+import { useRouter } from "expo-router";
 
 export const Shop = () => {
+  const router = useRouter();
   return (
-    <TouchableOpacity style={styles.shopContainer} activeOpacity={0.8}>
+    <TouchableOpacity
+      style={styles.shopContainer}
+      activeOpacity={0.8}
+      onPress={() => router.push("/(tabs)/shops/[id]")}
+    >
       <View style={styles.imageContainer}>
         <Entypo name="shop" size={50} color="white" />
       </View>

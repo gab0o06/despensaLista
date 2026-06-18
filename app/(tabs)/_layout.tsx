@@ -41,6 +41,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <View style={styles.floatingButton}>
               <Feather name="shopping-cart" size={30} color="white" />
+              {focused && <View style={styles.activeDot} />}
             </View>
           ),
           tabBarAccessibilityLabel: "Shops Tab",
