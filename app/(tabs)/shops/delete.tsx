@@ -5,7 +5,7 @@ import { Button } from "../../../components/Btn";
 
 const { useRouter } = require("expo-router");
 
-export default function editShop() {
+export default function deleteShop() {
   const route = useRouter();
   return (
     <ScrollView
