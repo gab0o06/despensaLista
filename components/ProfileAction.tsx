@@ -6,11 +6,20 @@ import { Colors } from "../constants/theme";
 interface ProfileActionProps {
   icon?: "user" | "mail" | "bell" | "moon";
   nameAction?: string;
+  onPress?: () => void;
 }
 
-export const ProfileAction = ({ icon, nameAction }: ProfileActionProps) => {
+export const ProfileAction = ({
+  icon,
+  nameAction,
+  onPress,
+}: ProfileActionProps) => {
   return (
-    <TouchableOpacity style={styles.mainActionContainer} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={styles.mainActionContainer}
+      activeOpacity={0.7}
+      onPress={onPress}
+    >
       <View style={styles.mainActionInfoContainer}>
         <View
           style={

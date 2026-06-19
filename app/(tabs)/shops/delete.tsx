@@ -3,10 +3,36 @@ import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { Button } from "../../../components/Btn";
 
-const { useRouter } = require("expo-router");
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { auth, db } from "../../../utils/firebase";
+import { doc, deleteDoc } from "firebase/firestore";
+import { useState } from "react";
 
 export default function deleteShop() {
+  const userId = auth.currentUser?.uid;
   const route = useRouter();
+  const [loading, setLoading] = useState(false);
+  const id = useLocalSearchParams<{ id: string }>().id;
+
+  const handleDeleteShop = async () => {
+    if (!userId) {
+      return route.replace("/(auth)/login");
+    }
+    if (!id) {
+      return;
+    }
+    setLoading(true);
+    route.replace("/(tabs)/shops");
+    try {
+      await deleteDoc(doc(db, "shops", id));
+      console.log("Shop deleted successfully");
+    } catch (error) {
+      console.error("Error deleting shop: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -28,9 +54,8 @@ export default function deleteShop() {
         <Button
           title="ELIMINAR"
           backgroundColor={Colors.dark.error}
-          onPress={() => {
-            route.push("/(tabs)/shops");
-          }}
+          onPress={handleDeleteShop}
+          disabled={loading}
         />
         <Button
           title="CANCELAR"

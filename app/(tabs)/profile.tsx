@@ -1,10 +1,22 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { signOut } from "firebase/auth";
+
 import { Colors } from "../../constants/theme";
 import { HeaderShopsBack } from "../../components/HeaderShopsBack";
-import { Entypo } from "@expo/vector-icons";
 import { ProfileAction } from "../../components/ProfileAction";
+import { auth } from "../../utils/firebase";
 
 export default function Profile() {
+  const handleLogOut = async () => {
+    try {
+      await GoogleSignin.signOut();
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+
   return (
     <View style={styles.body}>
       <HeaderShopsBack
@@ -18,7 +30,7 @@ export default function Profile() {
           <ProfileAction icon="bell" nameAction="Notifications" />
           <ProfileAction icon="moon" nameAction="Dark mode" />
         </View>
-        <ProfileAction nameAction="Log Out" />
+        <ProfileAction nameAction="Log Out" onPress={handleLogOut} />
       </View>
     </View>
   );

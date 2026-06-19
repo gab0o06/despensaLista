@@ -19,9 +19,18 @@ interface FormTextProps {
     | "CATEGORY"
     | "DESCRIPTION";
   placeholder?: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
+  maxLength?: number;
 }
 
-export const FormText = ({ label, placeholder }: FormTextProps) => {
+export const FormText = ({
+  label,
+  placeholder,
+  value,
+  maxLength,
+  onChangeText,
+}: FormTextProps) => {
   const [active, setActive] = useState(false);
   return (
     <View style={styles.inputContainer}>
@@ -29,11 +38,14 @@ export const FormText = ({ label, placeholder }: FormTextProps) => {
       <View style={styles.inputTextContainer}>
         <TextInput
           placeholder={placeholder}
+          value={value}
+          onChangeText={onChangeText}
           secureTextEntry={
             label === "PASSWORD" || label === "CONFIRM PASSWORD"
               ? !active
               : false
           }
+          maxLength={maxLength}
           style={[
             styles.inputText,
             (label === "DESCRIPTION" && styles.descriptionChange) || {},

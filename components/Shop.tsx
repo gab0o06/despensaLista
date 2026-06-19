@@ -3,21 +3,57 @@ import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { Colors } from "../constants/theme";
 import { useRouter } from "expo-router";
 
-export const Shop = () => {
+interface ShopProps {
+  id: string;
+  name: string;
+  description: string;
+  members: string[];
+  category: string;
+  createdAt: Date;
+  lastActivity: Date;
+}
+
+export const Shop = ({
+  id,
+  name,
+  description,
+  lastActivity,
+  createdAt,
+  members,
+}: ShopProps) => {
   const router = useRouter();
+
+  const formatDate = (date: Date) => {
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (minutes < 60) return `${minutes} min ago`;
+    if (hours < 24) return `${hours} h ago`;
+    return `${days} d ago`;
+  };
+
   return (
     <TouchableOpacity
       style={styles.shopContainer}
       activeOpacity={0.8}
-      onPress={() => router.push("/(tabs)/shops/[id]")}
+      onPress={() => router.push(`/(tabs)/shops/${id}`)}
     >
       <View style={styles.imageContainer}>
         <Entypo name="shop" size={50} color="white" />
       </View>
       <View style={styles.txtContainer}>
-        <Text style={styles.shopName}>Aki</Text>
-        <Text style={styles.shopDescription}>10 productos agregados</Text>
-        <Text style={styles.shopDescription}>Ult. Actualización: 3 min</Text>
+        <Text style={styles.shopName} numberOfLines={1}>
+          {name}
+        </Text>
+        <Text style={styles.shopDescription} numberOfLines={1}>
+          {description}
+        </Text>
+        <Text style={styles.shopDescription}>
+          Ult. Act: {formatDate(lastActivity)}
+        </Text>
       </View>
       <View style={styles.infoContainer}>
         <Entypo name="chevron-right" size={40} color="white" />

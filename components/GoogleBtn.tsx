@@ -14,6 +14,7 @@ import {
 
 import { auth, db } from "../utils/firebase";
 import { Colors } from "../constants/theme";
+import { doc, setDoc } from "firebase/firestore";
 
 interface GoogleBtnProps {
   text?: string;
@@ -38,12 +39,18 @@ export const GoogleBtn = ({ text, action }: GoogleBtnProps) => {
         const credential = GoogleAuthProvider.credential(idToken);
         const result = await signInWithCredential(auth, credential);
         const details = getAdditionalUserInfo(result);
+
         if (details?.isNewUser) {
-          return router.replace("/login");
-        } else {
-          if (action === "signin") {
-            return router.replace("/login");
-          }
+          await setDoc(doc(db, "users", result.user.uid), {
+            username: result.user.displayName,
+            email: result.user.email,
+            photoURL: result.user.photoURL,
+            createdAt: new Date(),
+            preferences: {
+              theme: "dark",
+              notifications: true,
+            },
+          });
         }
 
         console.log("User signed in with Google:", { email, name, photo });

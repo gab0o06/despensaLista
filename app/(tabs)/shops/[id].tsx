@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import { useRouter, useFocusEffect } from "expo-router";
+import { useRouter, useFocusEffect, useLocalSearchParams } from "expo-router";
 
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { Colors } from "../../../constants/theme";
@@ -11,6 +11,7 @@ import { useCallback, useState } from "react";
 export default function ShopTemplateInfo() {
   const route = useRouter();
   const [activeMoreFunctions, setActiveMoreFunctions] = useState(false);
+  const shopId = useLocalSearchParams<{ id: string }>().id;
 
   useFocusEffect(
     useCallback(() => {
@@ -51,7 +52,7 @@ export default function ShopTemplateInfo() {
                   borderRadius: 8,
                   marginBottom: 10,
                 }}
-                onPress={() => route.push("/(tabs)/shops/edit")}
+                onPress={() => route.push(`/(tabs)/shops/edit?id=${shopId}`)}
               >
                 <Entypo name="pencil" size={24} color="black" />
               </TouchableOpacity>
@@ -61,7 +62,7 @@ export default function ShopTemplateInfo() {
                   borderRadius: 8,
                   padding: 10,
                 }}
-                onPress={() => route.push("/(tabs)/shops/delete")}
+                onPress={() => route.push(`/(tabs)/shops/delete?id=${shopId}`)}
               >
                 <Entypo name="trash" size={24} color="white" />
               </TouchableOpacity>

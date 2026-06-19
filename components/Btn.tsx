@@ -6,6 +6,7 @@ interface ButtonProps {
   onPress: () => void;
   backgroundColor?: string;
   textColor?: string;
+  disabled?: boolean;
 }
 
 export const Button = ({
@@ -13,11 +14,13 @@ export const Button = ({
   onPress,
   backgroundColor,
   textColor,
+  disabled,
 }: ButtonProps) => {
   return (
     <TouchableOpacity
       style={[styles.primaryButton, backgroundColor && { backgroundColor }]}
       onPress={onPress}
+      disabled={disabled}
     >
       <Text
         style={[styles.primaryButtonText, textColor && { color: textColor }]}
