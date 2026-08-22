@@ -1,13 +1,23 @@
-import { View, ScrollView, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  TextInput,
+} from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { FormText } from "../../../components/FormText";
 import { Button } from "../../../components/Btn";
 import { auth, db } from "../../../utils/firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { categories } from "../../../constants/shopCategories";
 
 export default function createShop() {
   const [nameShop, setNameShop] = useState("");
@@ -82,12 +92,32 @@ export default function createShop() {
           value={nameShop}
           onChangeText={setNameShop}
         />
-        <FormText
-          label="CATEGORY"
-          placeholder="Categoría"
-          value={category}
-          onChangeText={setCategory}
-        />
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>CATEGORY</Text>
+          <View style={styles.inputTextContainer}>
+            {Object.values(categories).map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => setCategory(item.name)}
+                style={[
+                  styles.categoryItem,
+                  category === item.name && {
+                    backgroundColor: Colors.dark.secondary,
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.categoryText,
+                    category === item.name && styles.categoryTextSelected,
+                  ]}
+                >
+                  {item.icon} {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
         <FormText
           label="DESCRIPTION"
           placeholder="Descripción"
@@ -115,5 +145,42 @@ const styles = StyleSheet.create({
   formContainer: {
     gap: 16,
     marginBottom: 120,
+  },
+  inputContainer: {
+    gap: 16,
+  },
+  inputLabel: {
+    color: Colors.dark.text,
+    fontFamily: "Sen_400Regular",
+    fontSize: 16,
+  },
+  inputTextContainer: {
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    gap: 10,
+  },
+
+  categoryItem: {
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Colors.dark.secondary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  categoryText: {
+    color: "#888",
+    fontFamily: "Sen_400Regular",
+    fontSize: 14,
+  },
+  categoryTextSelected: {
+    color: Colors.dark.text,
+    fontFamily: "Sen_700Bold",
   },
 });

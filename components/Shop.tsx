@@ -1,3 +1,4 @@
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { Colors } from "../constants/theme";
@@ -13,6 +14,15 @@ interface ShopProps {
   lastActivity: Date;
 }
 
+const categoryIcons: Record<string, keyof typeof MaterialIcons.glyphMap> = {
+  Moda: "checkroom",
+  Tecnologia: "devices",
+  Alimentos: "local-grocery-store",
+  Hogar: "home",
+  Belleza: "spa",
+  Deportes: "sports-soccer",
+};
+
 export const Shop = ({
   id,
   name,
@@ -20,8 +30,10 @@ export const Shop = ({
   lastActivity,
   createdAt,
   members,
+  category,
 }: ShopProps) => {
   const router = useRouter();
+  const iconName = categoryIcons[category] || "storefront";
 
   const formatDate = (date: Date) => {
     const now = new Date();
@@ -30,9 +42,9 @@ export const Shop = ({
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    if (minutes < 60) return `${minutes} min ago`;
-    if (hours < 24) return `${hours} h ago`;
-    return `${days} d ago`;
+    if (minutes < 60) return `${Math.abs(minutes)} min ago`;
+    if (hours < 24) return `${Math.abs(hours)} h ago`;
+    return `${Math.abs(days)} days ago`;
   };
 
   return (
@@ -42,7 +54,7 @@ export const Shop = ({
       onPress={() => router.push(`/(tabs)/shops/${id}`)}
     >
       <View style={styles.imageContainer}>
-        <Entypo name="shop" size={50} color="white" />
+        <MaterialIcons name={iconName} size={50} color="white" />
       </View>
       <View style={styles.txtContainer}>
         <Text style={styles.shopName} numberOfLines={1}>

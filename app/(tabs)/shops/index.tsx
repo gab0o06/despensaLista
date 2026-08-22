@@ -1,18 +1,17 @@
-import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { Shop } from "../../../components/Shop";
 import { Entypo } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { auth, db } from "../../../utils/firebase";
-import {
-  collection,
-  doc,
-  getDocs,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 interface ShopData {
@@ -27,6 +26,7 @@ interface ShopData {
 
 export default function myShops() {
   const [shops, setShops] = useState<ShopData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const userId = auth.currentUser?.uid;
@@ -47,11 +47,28 @@ export default function myShops() {
           lastActivity: docData.lastActivity?.toDate() ?? new Date(),
         };
       }) as ShopData[];
+      setLoading(false);
       setShops(data);
     });
 
     return unsubscribe;
   }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.body}>
+        <HeaderShopsBack
+          title="Mis tiendas"
+          subtitle="Visualizar todas tus tiendas."
+        />
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={Colors.dark.secondary} />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.body}>

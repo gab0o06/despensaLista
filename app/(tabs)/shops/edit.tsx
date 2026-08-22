@@ -1,11 +1,75 @@
-import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import { updateDoc, serverTimestamp, doc } from "firebase/firestore";
+
 import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { FormText } from "../../../components/FormText";
 import { Button } from "../../../components/Btn";
-import { useState } from "react";
+import { auth, db } from "../../../utils/firebase";
+import { categories } from "../../../constants/shopCategories";
 
 export default function editShop() {
+  const [nameShop, setNameShop] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const id = useLocalSearchParams<{ id: string }>().id;
+
+  const router = useRouter();
+
+  const handleCreateShop = async () => {
+    if (
+      !nameShop ||
+      !category ||
+      !description ||
+      nameShop.trim() === "" ||
+      category.trim() === "" ||
+      description.trim() === ""
+    )
+      return Alert.alert(
+        "All fields are required",
+        "Please fill in all the fields to update your shop.",
+      );
+
+    const user = auth.currentUser;
+    if (!user) {
+      return Alert.alert(
+        "Not Authenticated",
+        "You need to be logged in to update a shop.",
+      );
+    }
+    setLoading(true);
+
+    try {
+      await updateDoc(doc(db, "shops", id), {
+        name: nameShop,
+        category,
+        description,
+        lastActivity: serverTimestamp(),
+      });
+      router.back();
+      console.log("Shop updated successfully");
+    } catch (error) {
+      console.error("Error updating shop:", error);
+      Alert.alert(
+        "Error",
+        "An error occurred while updating your shop. Please try again later.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -20,13 +84,49 @@ export default function editShop() {
         />
       </View>
       <View style={styles.formContainer}>
-        <FormText label="NAME" placeholder="Nombre Tienda" />
-        <FormText label="CATEGORY" placeholder="Categoría" />
-        <FormText label="DESCRIPTION" placeholder="Descripción" />
+        <FormText
+          label="NAME"
+          placeholder="Nombre Tienda"
+          value={nameShop}
+          onChangeText={setNameShop}
+        />
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>CATEGORY</Text>
+          <View style={styles.inputTextContainer}>
+            {Object.values(categories).map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => setCategory(item.name)}
+                style={[
+                  styles.categoryItem,
+                  category === item.name && {
+                    backgroundColor: Colors.dark.secondary,
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.categoryText,
+                    category === item.name && styles.categoryTextSelected,
+                  ]}
+                >
+                  {item.icon} {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+        <FormText
+          label="DESCRIPTION"
+          placeholder="Descripción"
+          value={description}
+          onChangeText={setDescription}
+        />
         <Button
-          title="SAVE"
+          title={loading ? "Updating..." : "Update Shop"}
           backgroundColor={Colors.dark.secondary}
-          onPress={() => {}}
+          onPress={handleCreateShop}
+          disabled={loading}
         />
       </View>
     </ScrollView>
@@ -42,5 +142,42 @@ const styles = StyleSheet.create({
   formContainer: {
     gap: 16,
     marginBottom: 120,
+  },
+  inputContainer: {
+    gap: 16,
+  },
+  inputLabel: {
+    color: Colors.dark.text,
+    fontFamily: "Sen_400Regular",
+    fontSize: 16,
+  },
+  inputTextContainer: {
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    gap: 10,
+  },
+
+  categoryItem: {
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Colors.dark.secondary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  categoryText: {
+    color: "#888",
+    fontFamily: "Sen_400Regular",
+    fontSize: 14,
+  },
+  categoryTextSelected: {
+    color: Colors.dark.text,
+    fontFamily: "Sen_700Bold",
   },
 });
