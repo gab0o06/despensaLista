@@ -1,42 +1,53 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Colors } from "../constants/theme";
 import { Entypo } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 interface ItemShopProps {
+  id?: string;
   category?: string;
   name?: string;
-  units?: string;
+  price?: number;
   quantity?: number;
+  shopName?: string;
 }
 
 export const ItemShop = ({
+  id,
   category,
   name,
-  units,
+  price,
   quantity,
+  shopName,
 }: ItemShopProps) => {
   return (
-    <View>
-      <Text style={styles.mainCategoryText}>{category}</Text>
-      <View style={styles.mainItemsListContainer}>
-        {quantity && quantity > 0 && (
-          <View style={styles.mainItemContainer}>
-            <View style={styles.mainItemInfoContainer}>
-              <View style={styles.mainItemImgContainer}>
-                <Entypo name="bowl" size={34} color="#C0C0C0" />
+    <Link
+      href={{ pathname: `/shops/items/${id}`, params: { shopName } }}
+      asChild
+    >
+      <TouchableOpacity>
+        <View style={styles.mainItemsListContainer}>
+          {quantity && quantity > 0 && (
+            <View style={styles.mainItemContainer}>
+              <View style={styles.mainItemInfoContainer}>
+                <View style={styles.mainItemImgContainer}>
+                  <Entypo name="bowl" size={34} color="#C0C0C0" />
+                </View>
+                <View>
+                  <Text style={styles.mainItemName}>{name}</Text>
+                  <Text style={styles.mainItemPrice}>
+                    ${price?.toString()} - {quantity} unidades
+                  </Text>
+                </View>
               </View>
               <View>
-                <Text style={styles.mainItemName}>{name}</Text>
-                <Text style={styles.mainItemUnits}>{units}</Text>
+                <Entypo name="chevron-right" size={40} color="white" />
               </View>
             </View>
-            <View>
-              <Entypo name="chevron-right" size={40} color="white" />
-            </View>
-          </View>
-        )}
-      </View>
-    </View>
+          )}
+        </View>
+      </TouchableOpacity>
+    </Link>
   );
 };
 
@@ -46,10 +57,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 
-  mainCategoryText: {
-    fontSize: 20,
-    color: "white",
-  },
   mainItemContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "Sen_700Bold",
   },
-  mainItemUnits: {
+  mainItemPrice: {
     fontSize: 14,
     color: "#D9D9D9",
   },

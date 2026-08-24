@@ -1,13 +1,13 @@
 import { Stack } from "expo-router";
 
-export default function RootLayout() {
+export default function ShopsLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="[id]" options={{ headerShown: false }} />
-      <Stack.Screen name="create" options={{ headerShown: false }} />
-      <Stack.Screen name="edit" options={{ headerShown: false }} />
-      <Stack.Screen name="delete" options={{ headerShown: false }} />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="[id]" />
+      <Stack.Screen name="create" />
+      <Stack.Screen name="edit" />
+      <Stack.Screen name="delete" />
     </Stack>
   );
 }

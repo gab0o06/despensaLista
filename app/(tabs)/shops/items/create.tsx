@@ -7,7 +7,7 @@ import {
   Text,
 } from "react-native";
 import { useState } from "react";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 import { Colors } from "../../../../constants/theme";
@@ -15,18 +15,22 @@ import { HeaderShopsBack } from "../../../../components/HeaderShopsBack";
 import { FormText } from "../../../../components/FormText";
 import { Button } from "../../../../components/Btn";
 import { auth, db } from "../../../../utils/firebase";
-import { categories } from "../../../../constants/shopCategories";
 
 export default function createItem() {
   const [nameItem, setNameItem] = useState("");
   const [category, setCategory] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState("");
   const [recurrence, setRecurrence] = useState("");
   const [price, setPrice] = useState("");
   const [dayShopping, setDayShopping] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const shopId = useLocalSearchParams<{ shopId: string }>().shopId;
+
   const router = useRouter();
+
+  const recurrenceOptions = ["Diaria", "Semanal", "Mensual", "Anual"];
+  const dayShoppingOptions = ["L", "M", "Mi", "J", "V", "S", "D"];
 
   const handleCreateItem = async () => {
     if (
@@ -40,6 +44,12 @@ export default function createItem() {
         "Please fill in all the fields to create your item.",
       );
 
+    if (!recurrence)
+      return Alert.alert(
+        "Falta información",
+        "Por favor selecciona la recurrencia del item.",
+      );
+
     const user = auth.currentUser;
     if (!user) {
       return Alert.alert(
@@ -49,22 +59,30 @@ export default function createItem() {
     }
     setLoading(true);
 
+    const finalPrice = price ? parseFloat(price) : 0;
+    const finalQuantity = quantity ? parseInt(quantity, 10) : 0;
+
     try {
-      //   await addDoc(collection(db, "shops"), {
-      //     members: [user.uid],
-      //     name: nameShop,
-      //     category,
-      //     description,
-      //     createdAt: serverTimestamp(),
-      //     lastActivity: serverTimestamp(),
-      //   });
+      await addDoc(collection(db, "products"), {
+        shopId,
+        name: nameItem,
+        category,
+        cantidad: finalQuantity,
+        recurrence,
+        agotado: finalQuantity === 0,
+        precio: finalPrice,
+        creator: user.uid,
+        createdAt: serverTimestamp(),
+        lastActivity: serverTimestamp(),
+        diaCompra: recurrence === "Semanal" ? dayShopping : null,
+      });
       router.back();
-      console.log("Shop created successfully");
+      console.log("Item created successfully");
     } catch (error) {
-      console.error("Error creating shop:", error);
+      console.error("Error creating item:", error);
       Alert.alert(
         "Error",
-        "An error occurred while creating your shop. Please try again later.",
+        "An error occurred while creating your item. Please try again later.",
       );
     } finally {
       setLoading(false);
@@ -103,45 +121,70 @@ export default function createItem() {
           <FormText
             type="number"
             label="QUANTITY"
-            placeholder="Item quantity"
-            value={quantity.toString()}
-            onChangeText={(text) => setQuantity(Number(text))}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <FormText
-            type="text"
-            label="RECURRENCIA"
-            placeholder="Semanal"
-            value={recurrence}
-            onChangeText={setRecurrence}
-          />
-          <FormText
-            type="price"
-            label="PRECIO"
-            placeholder="$0.00"
-            value={price}
+            placeholder="Ej: 5"
+            value={quantity}
             onChangeText={(text) => {
-              let formattedText = text.replace(/,/g, ".");
-              formattedText = formattedText.replace(/[^0-9.]/g, "");
-
-              const parts = formattedText.split(".");
-              if (parts.length > 2) {
-                formattedText = parts[0] + "." + parts.slice(1).join("");
-              }
-
-              setPrice(formattedText);
+              const numericText = text.replace(/[^0-9]/g, "");
+              setQuantity(numericText);
             }}
           />
         </View>
-        <FormText
-          type="text"
-          label="DIA DE COMPRA"
-          placeholder="Lunes"
-          value={dayShopping}
-          onChangeText={setDayShopping}
-        />
+        <View>
+          <Text style={styles.inputLabel}>RECURRENCIA</Text>
+          <View style={styles.optionsContainer}>
+            {recurrenceOptions.map((option) => (
+              <TouchableOpacity
+                key={option}
+                activeOpacity={0.7}
+                onPress={() => setRecurrence(option)}
+                style={[
+                  styles.optionItem,
+                  recurrence === option && styles.optionItemSelected,
+                ]}
+              >
+                <Text style={styles.optionText}>{option}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
 
+        {recurrence === "Semanal" && (
+          <View>
+            <Text style={styles.inputLabel}>DIA DE COMPRA</Text>
+            <View style={styles.optionsContainerDays}>
+              {dayShoppingOptions.map((option) => (
+                <TouchableOpacity
+                  key={option}
+                  activeOpacity={0.7}
+                  onPress={() => setDayShopping(option)}
+                  style={[
+                    styles.optionItemCircle,
+                    dayShopping === option && styles.optionItemSelected,
+                  ]}
+                >
+                  <Text style={styles.optionText}>{option}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        )}
+        <FormText
+          type="price"
+          label="PRECIO"
+          placeholder="$0.00"
+          value={price}
+          onChangeText={(text) => {
+            let formattedText = text.replace(/,/g, ".");
+            formattedText = formattedText.replace(/[^0-9.]/g, "");
+
+            const parts = formattedText.split(".");
+            if (parts.length > 2) {
+              formattedText = parts[0] + "." + parts.slice(1).join("");
+            }
+
+            setPrice(formattedText);
+          }}
+        />
         <Button
           title={loading ? "Creating..." : "CREATE ITEM"}
           backgroundColor={Colors.dark.secondary}
@@ -165,8 +208,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: "row",
-    gap: 24,
-    flexWrap: "wrap",
+    gap: 16,
     alignItems: "center",
     justifyContent: "space-between",
   },
@@ -174,34 +216,48 @@ const styles = StyleSheet.create({
     color: Colors.dark.text,
     fontFamily: "Sen_400Regular",
     fontSize: 16,
-  },
-  inputTextContainer: {
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    alignItems: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-    gap: 10,
+    marginBottom: 8,
   },
 
-  categoryItem: {
+  fullWidth: {
+    width: "100%",
+  },
+  optionsContainer: {
+    flexDirection: "row",
+    gap: 10,
+    flexWrap: "wrap",
+  },
+  optionItem: {
+    flex: 1,
     paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderRadius: 20,
+    paddingHorizontal: 10,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: Colors.dark.secondary,
+    borderColor: Colors.dark.search,
     alignItems: "center",
     justifyContent: "center",
   },
-  categoryText: {
-    color: "#888",
-    fontFamily: "Sen_400Regular",
-    fontSize: 14,
+  optionsContainerDays: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
   },
-  categoryTextSelected: {
+  optionItemCircle: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    borderWidth: 1,
+    borderColor: Colors.dark.search,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  optionItemSelected: {
+    backgroundColor: Colors.dark.secondary,
+    borderColor: Colors.dark.secondary,
+  },
+  optionText: {
     color: Colors.dark.text,
-    fontFamily: "Sen_700Bold",
+    fontFamily: "Sen_400Regular",
+    fontSize: 12,
   },
 });

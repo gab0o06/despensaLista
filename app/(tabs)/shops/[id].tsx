@@ -18,8 +18,17 @@ import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { Colors } from "../../../constants/theme";
 import { SearchInput } from "../../../components/SearchInput";
 import { ItemShop } from "../../../components/ItemShop";
-import { doc, getDoc, Timestamp } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  Timestamp,
+  where,
+  query,
+  collection,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../../../utils/firebase";
+import { getTime } from "../../../utils/time";
 
 interface Shop {
   members: string[];
@@ -30,20 +39,57 @@ interface Shop {
   lastActivity: Timestamp;
 }
 
+interface Product {
+  id: string;
+  agotado: boolean;
+  cantidad: number;
+  categoria: string;
+  createdAt: Timestamp;
+  creator: string;
+  lastActivity: Timestamp;
+  name: string;
+  precio: number;
+  recurrence: string;
+  shopId: string;
+}
+
 export default function ShopTemplateInfo() {
   const route = useRouter();
   const [shop, setShop] = useState<Shop | null>(null);
   const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[] | null>([]);
   const [activeMoreFunctions, setActiveMoreFunctions] = useState(false);
   const shopId = useLocalSearchParams<{ id: string }>().id;
 
   const shopInfo = async () => {
-    const shopDoc = await getDoc(doc(db, "shops", shopId));
+    setLoading(true);
 
-    if (shopDoc.exists()) {
-      const shopData = shopDoc.data();
-      console.log("Shop Data:", shopData);
-      setShop(shopData as Shop);
+    try {
+      const shopDoc = await getDoc(doc(db, "shops", shopId));
+      if (shopDoc.exists()) {
+        const shopData = shopDoc.data();
+        console.log("Shop Data:", shopData);
+        setShop(shopData as Shop);
+      }
+
+      const queryp = query(
+        collection(db, "products"),
+        where("shopId", "==", shopId),
+      );
+
+      const querySnapshot = await getDocs(queryp);
+
+      const productData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      console.log("Product Data:", productData);
+      setProducts(productData as Product[]);
+    } catch (err) {
+      console.error("Error fetching products data:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,15 +98,13 @@ export default function ShopTemplateInfo() {
       setActiveMoreFunctions(false);
 
       shopInfo();
-      setLoading(false);
       return () => {};
-    }, []),
+    }, [shopId]),
   );
 
   if (loading) {
     return (
       <View style={styles.body}>
-        <HeaderShopsBack title="Tienda Cargando..." />
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
@@ -69,25 +113,6 @@ export default function ShopTemplateInfo() {
       </View>
     );
   }
-
-  const getTime = (timestamp?: Timestamp | null) => {
-    if (!timestamp) return "Calculando...";
-
-    const now = new Date();
-    const pastDate = timestamp.toDate();
-    const diffInMs = now.getTime() - pastDate.getTime();
-
-    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
-
-    if (diffInMinutes < 1) return "Hace unos segundos";
-    if (diffInMinutes < 60) return `Hace ${diffInMinutes} min`;
-
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `Hace ${diffInHours} h`;
-
-    const diffInDays = Math.floor(diffInHours / 24);
-    return `Hace ${diffInDays} d`;
-  };
 
   return (
     <View style={styles.body}>
@@ -159,12 +184,18 @@ export default function ShopTemplateInfo() {
           <SearchInput placeholder="Search" />
         </View>
         <View style={{ marginVertical: 20 }}>
-          <ItemShop
-            category="Todos"
-            name="Producto 1"
-            units="kg"
-            quantity={3}
-          />
+          <Text style={styles.mainCategoryText}>Todos</Text>
+          {products?.map((product) => (
+            <ItemShop
+              key={product.id}
+              id={product.id}
+              category={product.categoria}
+              name={product.name}
+              price={product.precio}
+              quantity={product.cantidad}
+              shopName={shop?.name}
+            />
+          ))}
         </View>
       </View>
       <Link
@@ -266,5 +297,9 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: "center",
     alignItems: "center",
+  },
+  mainCategoryText: {
+    fontSize: 20,
+    color: "white",
   },
 });
