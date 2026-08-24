@@ -85,6 +85,7 @@ export default function editShop() {
       </View>
       <View style={styles.formContainer}>
         <FormText
+          type="text"
           label="NAME"
           placeholder="Nombre Tienda"
           value={nameShop}
@@ -117,6 +118,7 @@ export default function editShop() {
           </View>
         </View>
         <FormText
+          type="desc"
           label="DESCRIPTION"
           placeholder="Descripción"
           value={description}

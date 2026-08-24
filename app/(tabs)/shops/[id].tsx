@@ -1,25 +1,93 @@
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import { useRouter, useFocusEffect, useLocalSearchParams } from "expo-router";
+import {
+  useRouter,
+  useFocusEffect,
+  useLocalSearchParams,
+  Link,
+} from "expo-router";
+import { useCallback, useState } from "react";
 
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { Colors } from "../../../constants/theme";
 import { SearchInput } from "../../../components/SearchInput";
 import { ItemShop } from "../../../components/ItemShop";
-import { useCallback, useState } from "react";
+import { doc, getDoc, Timestamp } from "firebase/firestore";
+import { db } from "../../../utils/firebase";
+
+interface Shop {
+  members: string[];
+  name: string;
+  category: string;
+  description: string;
+  createdAt: Timestamp;
+  lastActivity: Timestamp;
+}
 
 export default function ShopTemplateInfo() {
   const route = useRouter();
+  const [shop, setShop] = useState<Shop | null>(null);
+  const [loading, setLoading] = useState(true);
   const [activeMoreFunctions, setActiveMoreFunctions] = useState(false);
   const shopId = useLocalSearchParams<{ id: string }>().id;
+
+  const shopInfo = async () => {
+    const shopDoc = await getDoc(doc(db, "shops", shopId));
+
+    if (shopDoc.exists()) {
+      const shopData = shopDoc.data();
+      console.log("Shop Data:", shopData);
+      setShop(shopData as Shop);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
       setActiveMoreFunctions(false);
 
+      shopInfo();
+      setLoading(false);
       return () => {};
     }, []),
   );
+
+  if (loading) {
+    return (
+      <View style={styles.body}>
+        <HeaderShopsBack title="Tienda Cargando..." />
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={Colors.dark.secondary} />
+        </View>
+      </View>
+    );
+  }
+
+  const getTime = (timestamp?: Timestamp | null) => {
+    if (!timestamp) return "Calculando...";
+
+    const now = new Date();
+    const pastDate = timestamp.toDate();
+    const diffInMs = now.getTime() - pastDate.getTime();
+
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+
+    if (diffInMinutes < 1) return "Hace unos segundos";
+    if (diffInMinutes < 60) return `Hace ${diffInMinutes} min`;
+
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `Hace ${diffInHours} h`;
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `Hace ${diffInDays} d`;
+  };
 
   return (
     <View style={styles.body}>
@@ -31,9 +99,11 @@ export default function ShopTemplateInfo() {
               <Entypo name="shop" size={60} color="white" />
             </View>
             <View>
-              <Text style={styles.shopName}>Aki</Text>
-              <Text style={styles.descShop}>10 productos agregados</Text>
-              <Text style={styles.descShop}>Ult. Actualización: 3 min</Text>
+              <Text style={styles.shopName}>{shop?.name}</Text>
+              <Text style={styles.descShop}>0 productos agregados</Text>
+              <Text style={styles.descShop}>
+                Ult. Actualización: {getTime(shop?.lastActivity)}
+              </Text>
             </View>
           </View>
           <TouchableOpacity
@@ -97,6 +167,17 @@ export default function ShopTemplateInfo() {
           />
         </View>
       </View>
+      <Link
+        href={{
+          pathname: "/(tabs)/shops/items/create",
+          params: { shopId: shopId },
+        }}
+        asChild
+      >
+        <TouchableOpacity style={styles.addShopBtn} activeOpacity={0.8}>
+          <Entypo name="plus" size={24} color={Colors.dark.bar} />
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 }
@@ -173,5 +254,17 @@ const styles = StyleSheet.create({
     right: 0,
     borderRadius: 8,
     zIndex: 10,
+  },
+  addShopBtn: {
+    position: "absolute",
+    bottom: 80,
+    right: 20,
+    zIndex: 10,
+    backgroundColor: Colors.dark.secondary,
+    borderRadius: 16,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

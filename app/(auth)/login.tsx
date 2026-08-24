@@ -32,8 +32,8 @@ export default function LoginScreen() {
         />
 
         <View style={styles.formContainer}>
-          <FormText label="EMAIL" placeholder="example@gmail.com" />
-          <FormText label="PASSWORD" placeholder="••••••••" />
+          <FormText type="text" label="EMAIL" placeholder="example@gmail.com" />
+          <FormText type="password" label="PASSWORD" placeholder="••••••••" />
           <View style={styles.footerContainer}>
             <TouchableOpacity
               style={styles.rememberMe}

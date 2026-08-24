@@ -10,14 +10,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 
 interface FormTextProps {
-  label?:
-    | "EMAIL"
-    | "USERNAME"
-    | "PASSWORD"
-    | "CONFIRM PASSWORD"
-    | "NAME"
-    | "CATEGORY"
-    | "DESCRIPTION";
+  type?: "text" | "desc" | "password" | "number" | "price";
+  label?: string;
   placeholder?: string;
   value?: string;
   onChangeText?: (text: string) => void;
@@ -25,6 +19,7 @@ interface FormTextProps {
 }
 
 export const FormText = ({
+  type,
   label,
   placeholder,
   value,
@@ -40,21 +35,24 @@ export const FormText = ({
           placeholder={placeholder}
           value={value}
           onChangeText={onChangeText}
-          secureTextEntry={
-            label === "PASSWORD" || label === "CONFIRM PASSWORD"
-              ? !active
-              : false
-          }
+          secureTextEntry={type === "password" ? !active : false}
           maxLength={maxLength}
+          keyboardType={
+            type === "price"
+              ? "decimal-pad"
+              : type === "number"
+                ? "numeric"
+                : "default"
+          }
           style={[
             styles.inputText,
-            (label === "DESCRIPTION" && styles.descriptionChange) || {},
+            (type === "desc" && styles.descriptionChange) || {},
           ]}
-          multiline={label === "DESCRIPTION"}
-          textAlignVertical={label === "DESCRIPTION" ? "top" : "center"}
+          multiline={type === "desc"}
+          textAlignVertical={type === "desc" ? "top" : "center"}
           placeholderTextColor={Colors.dark.textMuted}
         />
-        {label === "PASSWORD" || label === "CONFIRM PASSWORD" ? (
+        {type === "password" ? (
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => {
@@ -76,6 +74,7 @@ export const FormText = ({
 const styles = StyleSheet.create({
   inputContainer: {
     gap: 16,
+    flex: 1,
   },
   inputLabel: {
     color: Colors.dark.text,

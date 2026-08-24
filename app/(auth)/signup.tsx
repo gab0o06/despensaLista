@@ -34,10 +34,14 @@ export default function SingUpScreen() {
 
         <View style={styles.formContainer}>
           <GoogleBtn text="SIGN UP WITH GOOGLE" action="signin" />
-          <FormText label="USERNAME" placeholder="John Doe" />
-          <FormText label="EMAIL" placeholder="example@gmail.com" />
-          <FormText label="PASSWORD" placeholder="••••••••" />
-          <FormText label="CONFIRM PASSWORD" placeholder="••••••••" />
+          <FormText type="text" label="USERNAME" placeholder="John Doe" />
+          <FormText type="text" label="EMAIL" placeholder="example@gmail.com" />
+          <FormText type="password" label="PASSWORD" placeholder="••••••••" />
+          <FormText
+            type="password"
+            label="CONFIRM PASSWORD"
+            placeholder="••••••••"
+          />
 
           <Button title="SIGN UP" onPress={() => {}} />
         </View>
