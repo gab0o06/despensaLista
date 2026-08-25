@@ -2,12 +2,15 @@ import { View, StyleSheet } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { signOut } from "firebase/auth";
 
-import { Colors } from "../../constants/theme";
-import { HeaderShopsBack } from "../../components/HeaderShopsBack";
-import { ProfileAction } from "../../components/ProfileAction";
-import { auth } from "../../utils/firebase";
+import { Colors } from "../../../constants/theme";
+import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
+import { ProfileAction } from "../../../components/ProfileAction";
+import { auth } from "../../../utils/firebase";
+import { useRouter } from "expo-router/build/exports";
 
 export default function Profile() {
+  const router = useRouter();
+
   const handleLogOut = async () => {
     try {
       await GoogleSignin.signOut();
@@ -25,8 +28,20 @@ export default function Profile() {
       />
       <View>
         <View style={styles.mainItemsListContainer}>
-          <ProfileAction icon="user" nameAction="Username" />
-          <ProfileAction icon="mail" nameAction="Email" />
+          <ProfileAction
+            icon="user"
+            nameAction="Username"
+            onPress={() => {
+              router.push("/(tabs)/profile/username");
+            }}
+          />
+          <ProfileAction
+            icon="mail"
+            nameAction="Email"
+            onPress={() => {
+              router.push("/(tabs)/profile/email");
+            }}
+          />
           <ProfileAction icon="bell" nameAction="Notifications" />
           <ProfileAction icon="moon" nameAction="Dark mode" />
         </View>

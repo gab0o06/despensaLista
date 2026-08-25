@@ -3,10 +3,8 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
-  FlatList,
   TouchableOpacity,
   Text,
-  TextInput,
 } from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";

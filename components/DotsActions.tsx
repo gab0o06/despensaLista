@@ -59,6 +59,8 @@ export const DotsActions = ({
 
 const styles = StyleSheet.create({
   actionDots: {
+    position: "absolute",
+    right: 0,
     alignItems: "center",
     width: 30,
     height: 30,

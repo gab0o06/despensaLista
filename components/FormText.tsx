@@ -74,7 +74,6 @@ export const FormText = ({
 const styles = StyleSheet.create({
   inputContainer: {
     gap: 16,
-    flex: 1,
   },
   inputLabel: {
     color: Colors.dark.text,

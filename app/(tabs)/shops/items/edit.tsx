@@ -5,16 +5,11 @@ import {
   Alert,
   TouchableOpacity,
   Text,
+  ActivityIndicator,
 } from "react-native";
-import { useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
+import { useCallback, useState } from "react";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { getDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 import { Colors } from "../../../../constants/theme";
 import { HeaderShopsBack } from "../../../../components/HeaderShopsBack";
@@ -30,6 +25,7 @@ export default function editItem() {
   const [price, setPrice] = useState("");
   const [dayShopping, setDayShopping] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
 
   const productId = useLocalSearchParams<{ id: string }>().id;
 
@@ -38,7 +34,7 @@ export default function editItem() {
   const recurrenceOptions = ["Diaria", "Semanal", "Mensual", "Anual"];
   const dayShoppingOptions = ["L", "M", "Mi", "J", "V", "S", "D"];
 
-  const handleCreateItem = async () => {
+  const handleEditItem = async () => {
     if (
       !nameItem ||
       !category ||
@@ -92,6 +88,45 @@ export default function editItem() {
       setLoading(false);
     }
   };
+
+  const fetchProductData = async () => {
+    try {
+      setFetching(true);
+      const productDoc = await getDoc(doc(db, "products", productId));
+      if (productDoc.exists()) {
+        const productData = productDoc.data();
+        setNameItem(productData.name);
+        setCategory(productData.category);
+        setQuantity(productData.cantidad.toString());
+        setRecurrence(productData.recurrence);
+        setPrice(productData.precio.toString());
+        setDayShopping(productData.diaCompra || "");
+      }
+    } catch (err) {
+      console.error("Error fetching product data:", err);
+    } finally {
+      setFetching(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProductData();
+      return () => {};
+    }, [productId]),
+  );
+
+  if (fetching) {
+    return (
+      <View style={styles.body}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={Colors.dark.secondary} />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -192,7 +227,7 @@ export default function editItem() {
         <Button
           title={loading ? "Updating..." : "UPDATE ITEM"}
           backgroundColor={Colors.dark.secondary}
-          onPress={handleCreateItem}
+          onPress={handleEditItem}
           disabled={loading}
         />
       </View>

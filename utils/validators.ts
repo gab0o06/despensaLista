@@ -9,7 +9,7 @@ export const getTime = (timestamp?: Timestamp | null) => {
 
   const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
 
-  if (diffInMinutes < 1) return "Hace unos segundos";
+  if (diffInMinutes < 1) return "Hace poco";
   if (diffInMinutes < 60) return `Hace ${diffInMinutes} min`;
 
   const diffInHours = Math.floor(diffInMinutes / 60);
@@ -17,4 +17,11 @@ export const getTime = (timestamp?: Timestamp | null) => {
 
   const diffInDays = Math.floor(diffInHours / 24);
   return `Hace ${diffInDays} d`;
+};
+
+export const isLengthValid = (str: string, maxLength: number) => {
+  if (str.length > maxLength) {
+    return str.slice(0, maxLength - 2) + "...";
+  }
+  return str;
 };

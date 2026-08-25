@@ -29,7 +29,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { db } from "../../../utils/firebase";
-import { getTime } from "../../../utils/time";
+import { getTime, isLengthValid } from "../../../utils/validators";
 
 interface Shop {
   members: string[];
@@ -59,7 +59,6 @@ export default function ShopTemplateInfo() {
   const [shop, setShop] = useState<Shop | null>(null);
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[] | null>([]);
-  const [activeMoreFunctions, setActiveMoreFunctions] = useState(false);
   const shopId = useLocalSearchParams<{ id: string }>().id;
 
   const shopInfo = async () => {
@@ -96,8 +95,6 @@ export default function ShopTemplateInfo() {
 
   useFocusEffect(
     useCallback(() => {
-      setActiveMoreFunctions(false);
-
       shopInfo();
       return () => {};
     }, [shopId]),
@@ -125,7 +122,9 @@ export default function ShopTemplateInfo() {
               <Entypo name="shop" size={60} color="white" />
             </View>
             <View>
-              <Text style={styles.shopName}>{shop?.name}</Text>
+              <Text style={styles.shopName}>
+                {shop?.name && isLengthValid(shop?.name, 8)}
+              </Text>
               <Text style={styles.descShop}>0 productos agregados</Text>
               <Text style={styles.descShop}>
                 Ult. Actualización: {getTime(shop?.lastActivity)}

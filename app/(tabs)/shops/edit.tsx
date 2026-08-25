@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useCallback, useState } from "react";
+import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import {
   View,
   ScrollView,
@@ -7,8 +7,9 @@ import {
   Alert,
   TouchableOpacity,
   Text,
+  ActivityIndicator,
 } from "react-native";
-import { updateDoc, serverTimestamp, doc } from "firebase/firestore";
+import { updateDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
 
 import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
@@ -22,12 +23,13 @@ export default function editShop() {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
 
   const id = useLocalSearchParams<{ id: string }>().id;
 
   const router = useRouter();
 
-  const handleCreateShop = async () => {
+  const handleUpdateShop = async () => {
     if (
       !nameShop ||
       !category ||
@@ -69,6 +71,46 @@ export default function editShop() {
       setLoading(false);
     }
   };
+
+  const fetchShopData = async () => {
+    setFetching(true);
+    try {
+      const shopDoc = await getDoc(doc(db, "shops", id));
+      if (shopDoc.exists()) {
+        const shopData = shopDoc.data();
+        setNameShop(shopData.name || "");
+        setCategory(shopData.category || "");
+        setDescription(shopData.description || "");
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error fetching shop data:", error);
+    } finally {
+      setFetching(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (id) {
+        fetchShopData();
+      }
+      return () => {};
+    }, [id]),
+  );
+
+  if (fetching) {
+    return (
+      <View style={styles.body}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={Colors.dark.secondary} />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -127,7 +169,7 @@ export default function editShop() {
         <Button
           title={loading ? "Updating..." : "Update Shop"}
           backgroundColor={Colors.dark.secondary}
-          onPress={handleCreateShop}
+          onPress={handleUpdateShop}
           disabled={loading}
         />
       </View>

@@ -18,7 +18,7 @@ import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
 
 import { HeaderShopsBack } from "../../../../components/HeaderShopsBack";
 import { Colors } from "../../../../constants/theme";
-import { getTime } from "../../../../utils/time";
+import { getTime, isLengthValid } from "../../../../utils/validators";
 import { db } from "../../../../utils/firebase";
 import { Button } from "../../../../components/Btn";
 import { DotsActions } from "../../../../components/DotsActions";
@@ -46,6 +46,16 @@ export default function ItemTemplateInfo() {
   const [quantity, setQuantity] = useState<number>(0);
   const productId = useLocalSearchParams<{ id: string }>().id;
   const shopName = useLocalSearchParams<{ shopName: string }>().shopName;
+
+  const days: Record<string, string> = {
+    L: "Lunes",
+    M: "Martes",
+    Mi: "Miércoles",
+    J: "Jueves",
+    V: "Viernes",
+    S: "Sábado",
+    D: "Domingo",
+  };
 
   const productInfo = async () => {
     setLoading(true);
@@ -116,9 +126,7 @@ export default function ItemTemplateInfo() {
             </View>
             <View>
               <Text style={styles.shopName}>
-                {product?.name.length != null && product?.name.length > 12
-                  ? `${product?.name.slice(0, 12)}...`
-                  : product?.name}
+                {product?.name && isLengthValid(product?.name, 8)}
               </Text>
               <View
                 style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
@@ -128,7 +136,9 @@ export default function ItemTemplateInfo() {
                   ${product?.precio?.toFixed(2) || "0.00"}
                 </Text>
               </View>
-              <Text style={styles.descShop}>Tienda · {shopName}</Text>
+              <Text style={styles.descShop}>
+                Tienda · {shopName && isLengthValid(shopName, 10)}
+              </Text>
             </View>
           </View>
           <DotsActions
@@ -151,7 +161,9 @@ export default function ItemTemplateInfo() {
             ${product?.precio.toFixed(2)}
           </Text>
           <Text style={styles.productInfoText}>
-            {product?.recurrence == "Semanal" ? product?.diaCompra : "N/A"}
+            {product?.recurrence == "Semanal" && product?.diaCompra
+              ? days[product?.diaCompra] || "N/A"
+              : "N/A"}
           </Text>
           <Text style={styles.productInfoText}>
             {getTime(product?.lastActivity)}
