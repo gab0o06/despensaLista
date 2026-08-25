@@ -5,6 +5,8 @@ export default function ItemsLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="[id]" />
       <Stack.Screen name="create" />
+      <Stack.Screen name="edit" />
+      <Stack.Screen name="delete" />
     </Stack>
   );
 }

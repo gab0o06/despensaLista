@@ -18,6 +18,7 @@ import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { Colors } from "../../../constants/theme";
 import { SearchInput } from "../../../components/SearchInput";
 import { ItemShop } from "../../../components/ItemShop";
+import { DotsActions } from "../../../components/DotsActions";
 import {
   doc,
   getDoc,
@@ -43,7 +44,7 @@ interface Product {
   id: string;
   agotado: boolean;
   cantidad: number;
-  categoria: string;
+  category: string;
   createdAt: Timestamp;
   creator: string;
   lastActivity: Timestamp;
@@ -131,38 +132,11 @@ export default function ShopTemplateInfo() {
               </Text>
             </View>
           </View>
-          <TouchableOpacity
-            style={styles.actionDots}
-            activeOpacity={0.7}
-            onPress={() => setActiveMoreFunctions(!activeMoreFunctions)}
-          >
-            <Entypo name="dots-three-horizontal" size={16} color="white" />
-          </TouchableOpacity>
-          {activeMoreFunctions && (
-            <View style={styles.moreFunctionsContainer}>
-              <TouchableOpacity
-                style={{
-                  padding: 10,
-                  backgroundColor: Colors.dark.accent,
-                  borderRadius: 8,
-                  marginBottom: 10,
-                }}
-                onPress={() => route.push(`/(tabs)/shops/edit?id=${shopId}`)}
-              >
-                <Entypo name="pencil" size={24} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: Colors.dark.error,
-                  borderRadius: 8,
-                  padding: 10,
-                }}
-                onPress={() => route.push(`/(tabs)/shops/delete?id=${shopId}`)}
-              >
-                <Entypo name="trash" size={24} color="white" />
-              </TouchableOpacity>
-            </View>
-          )}
+          <DotsActions
+            route={route}
+            pathEdit={`/(tabs)/shops/edit?id=${shopId}`}
+            pathDelete={`/(tabs)/shops/delete?id=${shopId}`}
+          />
         </View>
         <View style={{ gap: 20 }}>
           <View style={styles.categoriesContainer}>
@@ -189,7 +163,7 @@ export default function ShopTemplateInfo() {
             <ItemShop
               key={product.id}
               id={product.id}
-              category={product.categoria}
+              category={product.category}
               name={product.name}
               price={product.precio}
               quantity={product.cantidad}

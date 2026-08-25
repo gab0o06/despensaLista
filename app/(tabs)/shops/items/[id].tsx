@@ -21,6 +21,7 @@ import { Colors } from "../../../../constants/theme";
 import { getTime } from "../../../../utils/time";
 import { db } from "../../../../utils/firebase";
 import { Button } from "../../../../components/Btn";
+import { DotsActions } from "../../../../components/DotsActions";
 
 interface Product {
   id: string;
@@ -39,7 +40,6 @@ interface Product {
 
 export default function ItemTemplateInfo() {
   const route = useRouter();
-  const [activeMoreFunctions, setActiveMoreFunctions] = useState(false);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
@@ -67,8 +67,6 @@ export default function ItemTemplateInfo() {
 
   useFocusEffect(
     useCallback(() => {
-      setActiveMoreFunctions(false);
-
       productInfo();
       return () => {};
     }, [productId]),
@@ -117,7 +115,11 @@ export default function ItemTemplateInfo() {
               <Entypo name="shop" size={60} color="white" />
             </View>
             <View>
-              <Text style={styles.shopName}>{product?.name}</Text>
+              <Text style={styles.shopName}>
+                {product?.name.length != null && product?.name.length > 12
+                  ? `${product?.name.slice(0, 12)}...`
+                  : product?.name}
+              </Text>
               <View
                 style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
               >
@@ -129,40 +131,11 @@ export default function ItemTemplateInfo() {
               <Text style={styles.descShop}>Tienda · {shopName}</Text>
             </View>
           </View>
-          <TouchableOpacity
-            style={styles.actionDots}
-            activeOpacity={0.7}
-            onPress={() => setActiveMoreFunctions(!activeMoreFunctions)}
-          >
-            <Entypo name="dots-three-horizontal" size={16} color="white" />
-          </TouchableOpacity>
-          {activeMoreFunctions && (
-            <View style={styles.moreFunctionsContainer}>
-              <TouchableOpacity
-                style={{
-                  padding: 10,
-                  backgroundColor: Colors.dark.accent,
-                  borderRadius: 8,
-                  marginBottom: 10,
-                }}
-                onPress={() => route.push(`/(tabs)/shops/edit?id=${productId}`)}
-              >
-                <Entypo name="pencil" size={24} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: Colors.dark.error,
-                  borderRadius: 8,
-                  padding: 10,
-                }}
-                onPress={() =>
-                  route.push(`/(tabs)/shops/delete?id=${productId}`)
-                }
-              >
-                <Entypo name="trash" size={24} color="white" />
-              </TouchableOpacity>
-            </View>
-          )}
+          <DotsActions
+            route={route}
+            pathEdit={`/(tabs)/shops/items/edit?id=${productId}`}
+            pathDelete={`/(tabs)/shops/items/delete?id=${productId}&shopId=${product?.shopId}`}
+          />
         </View>
       </View>
       <View style={styles.productContainer}>
@@ -177,7 +150,9 @@ export default function ItemTemplateInfo() {
           <Text style={styles.productInfoText}>
             ${product?.precio.toFixed(2)}
           </Text>
-          <Text style={styles.productInfoText}>{product?.diaCompra}</Text>
+          <Text style={styles.productInfoText}>
+            {product?.recurrence == "Semanal" ? product?.diaCompra : "N/A"}
+          </Text>
           <Text style={styles.productInfoText}>
             {getTime(product?.lastActivity)}
           </Text>

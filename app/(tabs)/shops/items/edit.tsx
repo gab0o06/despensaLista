@@ -12,8 +12,8 @@ import {
   addDoc,
   collection,
   doc,
-  getDoc,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 
 import { Colors } from "../../../../constants/theme";
@@ -22,7 +22,7 @@ import { FormText } from "../../../../components/FormText";
 import { Button } from "../../../../components/Btn";
 import { auth, db } from "../../../../utils/firebase";
 
-export default function createItem() {
+export default function editItem() {
   const [nameItem, setNameItem] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -31,34 +31,12 @@ export default function createItem() {
   const [dayShopping, setDayShopping] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const shopId = useLocalSearchParams<{ shopId: string }>().shopId;
+  const productId = useLocalSearchParams<{ id: string }>().id;
 
   const router = useRouter();
 
   const recurrenceOptions = ["Diaria", "Semanal", "Mensual", "Anual"];
   const dayShoppingOptions = ["L", "M", "Mi", "J", "V", "S", "D"];
-
-  const shopInfo = async () => {
-    if (!shopId) {
-      Alert.alert(
-        "Shop ID missing",
-        "No se pudo obtener la información de la tienda. Por favor, inténtalo de nuevo.",
-      );
-      router.back();
-      return;
-    }
-
-    const shopDoc = await getDoc(doc(db, "shops", shopId));
-    if (!shopDoc.exists()) {
-      Alert.alert(
-        "Shop not found",
-        "No se encontró la tienda. Por favor, inténtalo de nuevo.",
-      );
-      router.back();
-      return;
-    }
-    return shopDoc.data();
-  };
 
   const handleCreateItem = async () => {
     if (
@@ -91,33 +69,24 @@ export default function createItem() {
     const finalQuantity = quantity ? parseInt(quantity, 10) : 0;
 
     try {
-      const shopData = await shopInfo();
-      if (!shopData) {
-        setLoading(false);
-        throw new Error("Shop data not found");
-      }
-
-      await addDoc(collection(db, "products"), {
-        shopId,
+      const productRef = doc(db, "products", productId);
+      await updateDoc(productRef, {
         name: nameItem,
         category,
         cantidad: finalQuantity,
         recurrence,
         agotado: finalQuantity === 0,
         precio: finalPrice,
-        creator: user.uid,
-        members: shopData.members,
-        createdAt: serverTimestamp(),
         lastActivity: serverTimestamp(),
         diaCompra: recurrence === "Semanal" ? dayShopping : null,
       });
       router.back();
-      console.log("Item created successfully");
+      console.log("Item edited successfully");
     } catch (error) {
-      console.error("Error creating item:", error);
+      console.error("Error editing item:", error);
       Alert.alert(
         "Error",
-        "An error occurred while creating your item. Please try again later.",
+        "An error occurred while editing your item. Please try again later.",
       );
     } finally {
       setLoading(false);
@@ -133,8 +102,8 @@ export default function createItem() {
     >
       <View>
         <HeaderShopsBack
-          title="Crear item"
-          subtitle="Ingresa los datos del nuevo Item"
+          title="Editar item"
+          subtitle="Ingresa los datos de la actualización"
         />
       </View>
       <View style={styles.formContainer}>
@@ -221,7 +190,7 @@ export default function createItem() {
           }}
         />
         <Button
-          title={loading ? "Creating..." : "CREATE ITEM"}
+          title={loading ? "Updating..." : "UPDATE ITEM"}
           backgroundColor={Colors.dark.secondary}
           onPress={handleCreateItem}
           disabled={loading}

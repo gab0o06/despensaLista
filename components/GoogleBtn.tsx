@@ -40,18 +40,21 @@ export const GoogleBtn = ({ text, action }: GoogleBtnProps) => {
         const result = await signInWithCredential(auth, credential);
         const details = getAdditionalUserInfo(result);
 
-        if (details?.isNewUser) {
-          await setDoc(doc(db, "users", result.user.uid), {
+        await setDoc(
+          doc(db, "users", result.user.uid),
+          {
             username: result.user.displayName,
             email: result.user.email,
             photoURL: result.user.photoURL,
             createdAt: new Date(),
+            lastLogin: new Date(),
             preferences: {
               theme: "dark",
               notifications: true,
             },
-          });
-        }
+          },
+          { merge: true },
+        );
 
         console.log("User signed in with Google:", { email, name, photo });
         router.replace("/(tabs)");
