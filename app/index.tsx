@@ -4,9 +4,8 @@ export default function Index() {
   return (
     <Redirect
       href={{
-        pathname: "/(tabs)/shops/",
+        pathname: "/(auth)/login",
       }}
     />
   );
-  // return <Redirect href="/(tabs)" />;
 }

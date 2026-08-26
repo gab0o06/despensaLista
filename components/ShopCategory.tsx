@@ -1,17 +1,41 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Colors } from "../constants/theme";
+import { useState } from "react";
 
-export const ShopCategory = () => {
+interface ShopCategoryProps {
+  name: string;
+  image: string;
+  isPressed?: boolean;
+  onPress?: () => void;
+}
+
+export const ShopCategory = ({
+  name,
+  image,
+  isPressed,
+  onPress,
+}: ShopCategoryProps) => {
   return (
-    <View style={styles.categoryContainer}>
-      <View style={styles.categoryImage}></View>
-      <Text>Categoria 1</Text>
-    </View>
+    <TouchableOpacity
+      style={
+        isPressed
+          ? [styles.categoryContainer, { backgroundColor: Colors.dark.accent }]
+          : styles.categoryContainer
+      }
+      activeOpacity={0.7}
+      onPress={onPress}
+    >
+      <View style={styles.categoryImage}>
+        <Text style={styles.categoryImageText}>{image}</Text>
+      </View>
+      <Text style={styles.categoryName}>{name}</Text>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   categoryContainer: {
-    backgroundColor: "#727272",
+    backgroundColor: Colors.dark.surface,
     padding: 8,
     borderRadius: 32,
     flexDirection: "row",
@@ -22,7 +46,18 @@ const styles = StyleSheet.create({
   categoryImage: {
     width: 40,
     height: 40,
-    backgroundColor: "#C4C4C4",
+    backgroundColor: Colors.dark.textMuted,
     borderRadius: 20,
+  },
+  categoryImageText: {
+    color: Colors.dark.background,
+    textAlign: "center",
+    lineHeight: 40,
+  },
+  categoryName: {
+    color: Colors.dark.text,
+    fontSize: 16,
+    fontWeight: "bold",
+    paddingRight: 10,
   },
 });

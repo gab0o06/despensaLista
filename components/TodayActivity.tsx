@@ -2,7 +2,19 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Colors } from "../constants/theme";
 
-export const TodayActivity = () => {
+interface TodayActivityProps {
+  title: string;
+  description: string;
+  isChecked?: boolean;
+  onPressCheck?: () => void;
+}
+
+export const TodayActivity = ({
+  title,
+  description,
+  isChecked,
+  onPressCheck,
+}: TodayActivityProps) => {
   return (
     <View style={styles.todayActivityContainer}>
       <View style={styles.leftTodayElements}>
@@ -10,12 +22,16 @@ export const TodayActivity = () => {
           <Entypo name="shop" size={24} color="white" />
         </View>
         <View>
-          <Text style={styles.todayActTitle}>Carne</Text>
-          <Text style={styles.todayActDescription}>Aki - 3 unidades</Text>
+          <Text style={styles.todayActTitle}>{title}</Text>
+          <Text style={styles.todayActDescription}>{description}</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.checkIcon} activeOpacity={0.5}>
-        <Entypo name="check" size={24} color="black" />
+      <TouchableOpacity
+        style={[styles.checkIcon, isChecked && styles.checkedIcon]}
+        activeOpacity={0.5}
+        onPress={onPressCheck}
+      >
+        <Entypo name="check" size={24} color={isChecked ? "white" : "black"} />
       </TouchableOpacity>
     </View>
   );
@@ -55,6 +71,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 4,
     marginRight: 10,
+    opacity: 1,
+  },
+  checkedIcon: {
+    backgroundColor: Colors.dark.accent,
     opacity: 1,
   },
 });

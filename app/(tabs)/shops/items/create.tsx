@@ -102,14 +102,13 @@ export default function createItem() {
         name: nameItem,
         category,
         cantidad: finalQuantity,
-        recurrence,
-        agotado: finalQuantity === 0,
+        recurrence: recurrence === "Semanal" ? dayShopping : recurrence,
+        compradoEn: serverTimestamp(),
         precio: finalPrice,
         creator: user.uid,
         members: shopData.members,
         createdAt: serverTimestamp(),
         lastActivity: serverTimestamp(),
-        diaCompra: recurrence === "Semanal" ? dayShopping : null,
       });
       router.back();
       console.log("Item created successfully");

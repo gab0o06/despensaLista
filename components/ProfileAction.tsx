@@ -1,24 +1,31 @@
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Switch } from "react-native";
 import { Colors } from "../constants/theme";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome";
 
 interface ProfileActionProps {
-  icon?: "user" | "mail" | "bell" | "moon";
+  icon?: "user" | "mail" | "bell" | "moon" | "userFont" | "bullhorn";
   nameAction?: string;
+  toggle?: boolean;
+  value?: boolean;
+  onValueChange?: (value: boolean) => void;
   onPress?: () => void;
 }
 
 export const ProfileAction = ({
   icon,
   nameAction,
+  toggle,
+  value = false,
+  onValueChange,
   onPress,
 }: ProfileActionProps) => {
   return (
     <TouchableOpacity
       style={styles.mainActionContainer}
-      activeOpacity={0.7}
-      onPress={onPress}
+      activeOpacity={toggle ? 1 : 0.7}
+      onPress={toggle ? () => onValueChange?.(!value) : onPress}
     >
       <View style={styles.mainActionInfoContainer}>
         <View
@@ -28,14 +35,29 @@ export const ProfileAction = ({
               : styles.mainActionImgContainer
           }
         >
-          <Feather name={icon} size={24} color="white" />
+          {icon === "userFont" ? (
+            <FontAwesome6 name="user" size={24} color="white" />
+          ) : icon === "bullhorn" ? (
+            <FontAwesome6 name="bullhorn" size={24} color="white" />
+          ) : (
+            <Feather name={icon} size={24} color="white" />
+          )}
         </View>
         <View>
           <Text style={styles.mainActionName}>{nameAction}</Text>
         </View>
       </View>
       <View>
-        <Entypo name="chevron-right" size={40} color="white" />
+        {toggle ? (
+          <Switch
+            value={value}
+            onValueChange={onValueChange}
+            trackColor={{ false: Colors.dark.text, true: Colors.dark.text }}
+            thumbColor={value ? Colors.dark.secondary : Colors.dark.text}
+          />
+        ) : (
+          <Entypo name="chevron-right" size={40} color="white" />
+        )}
       </View>
     </TouchableOpacity>
   );

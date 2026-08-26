@@ -6,15 +6,19 @@ import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { ProfileAction } from "../../../components/ProfileAction";
 import { auth } from "../../../utils/firebase";
-import { useRouter } from "expo-router/build/exports";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 
 export default function Profile() {
+  const [activeDarkMode, setActiveDarkMode] = useState(false);
+
   const router = useRouter();
 
   const handleLogOut = async () => {
     try {
       await GoogleSignin.signOut();
       await signOut(auth);
+      router.replace("/(auth)/login");
     } catch (error) {
       console.error("Error signing out: ", error);
     }
@@ -42,8 +46,20 @@ export default function Profile() {
               router.push("/(tabs)/profile/email");
             }}
           />
-          <ProfileAction icon="bell" nameAction="Notifications" />
-          <ProfileAction icon="moon" nameAction="Dark mode" />
+          <ProfileAction
+            icon="bell"
+            nameAction="Notifications"
+            onPress={() => {
+              router.push("/(tabs)/profile/preferences");
+            }}
+          />
+          <ProfileAction
+            icon="moon"
+            nameAction="Dark mode"
+            toggle={true}
+            value={activeDarkMode}
+            onValueChange={(value) => setActiveDarkMode(value)}
+          />
         </View>
         <ProfileAction nameAction="Log Out" onPress={handleLogOut} />
       </View>

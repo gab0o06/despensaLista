@@ -43,12 +43,12 @@ export default function RootLayout() {
 
     if (user && inAuthGroup) {
       router.replace({
-        pathname: "/(tabs)/shops/",
+        pathname: "/(tabs)/",
       });
     } else if (!user && !inAuthGroup) {
       router.replace("/(auth)/login");
     }
-  }, [user, initializing, segments]);
+  }, [user, initializing, segments, router]);
 
   useEffect(() => {
     if (loaded && !initializing) {

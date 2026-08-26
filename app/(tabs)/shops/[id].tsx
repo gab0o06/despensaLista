@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import {
@@ -28,7 +29,7 @@ import {
   collection,
   getDocs,
 } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
+import { auth, db } from "../../../utils/firebase";
 import { getTime, isLengthValid } from "../../../utils/validators";
 
 interface Shop {
@@ -65,6 +66,12 @@ export default function ShopTemplateInfo() {
     setLoading(true);
 
     try {
+      const userId = auth.currentUser?.uid;
+      if (!userId) {
+        console.error("User is not authenticated.");
+        return;
+      }
+
       const shopDoc = await getDoc(doc(db, "shops", shopId));
       if (shopDoc.exists()) {
         const shopData = shopDoc.data();
@@ -75,6 +82,7 @@ export default function ShopTemplateInfo() {
       const queryp = query(
         collection(db, "products"),
         where("shopId", "==", shopId),
+        where("members", "array-contains", userId),
       );
 
       const querySnapshot = await getDocs(queryp);
@@ -115,7 +123,7 @@ export default function ShopTemplateInfo() {
   return (
     <View style={styles.body}>
       <HeaderShopsBack />
-      <View>
+      <View style={{ flex: 1 }}>
         <View style={styles.headerContainer}>
           <View style={styles.headerShopInfo}>
             <View style={styles.imageContainer}>
@@ -156,8 +164,13 @@ export default function ShopTemplateInfo() {
           </View>
           <SearchInput placeholder="Search" />
         </View>
-        <View style={{ marginVertical: 20 }}>
-          <Text style={styles.mainCategoryText}>Todos</Text>
+
+        <Text style={styles.mainCategoryText}>Todos</Text>
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.container}
+          showsVerticalScrollIndicator={false}
+        >
           {products?.map((product) => (
             <ItemShop
               key={product.id}
@@ -169,7 +182,7 @@ export default function ShopTemplateInfo() {
               shopName={shop?.name}
             />
           ))}
-        </View>
+        </ScrollView>
       </View>
       <Link
         href={{
@@ -274,5 +287,12 @@ const styles = StyleSheet.create({
   mainCategoryText: {
     fontSize: 20,
     color: "white",
+    marginTop: 10,
+  },
+  container: {
+    flexGrow: 1,
+    paddingBottom: 150,
+    backgroundColor: Colors.dark.background,
+    justifyContent: "center",
   },
 });
