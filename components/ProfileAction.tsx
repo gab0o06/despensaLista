@@ -1,5 +1,4 @@
-import { Entypo } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
+import { Entypo, Feather } from "@expo/vector-icons";
 import { View, Text, StyleSheet, TouchableOpacity, Switch } from "react-native";
 import { Colors } from "../constants/theme";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome";

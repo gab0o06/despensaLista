@@ -8,7 +8,7 @@ import { auth, db } from "../../../../utils/firebase";
 import { doc, deleteDoc } from "firebase/firestore";
 import { useState } from "react";
 
-export default function deleteItem() {
+export default function DeleteItem() {
   const userId = auth.currentUser?.uid;
   const route = useRouter();
   const [loading, setLoading] = useState(false);
@@ -16,8 +16,6 @@ export default function deleteItem() {
   const shopId = useLocalSearchParams<{ shopId: string }>().shopId;
 
   const handleDeleteItem = async () => {
-    console.log("Mi UID actual es:", userId);
-
     if (!userId) {
       return route.replace("/(auth)/login");
     }
@@ -26,10 +24,7 @@ export default function deleteItem() {
     }
     setLoading(true);
     try {
-      console.log("productId:", productId);
-      console.log("shopId:", shopId);
       await deleteDoc(doc(db, "products", productId));
-      console.log("Product deleted successfully");
       route.replace(`/(tabs)/shops/${shopId}`);
     } catch (error) {
       console.error("Error deleting product: ", error);

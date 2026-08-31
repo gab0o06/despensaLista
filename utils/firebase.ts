@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+// @ts-expect-error - getReactNativePersistence no está en los tipos de firebase/auth pero existe en runtime (firebase-js-sdk#9316)
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";

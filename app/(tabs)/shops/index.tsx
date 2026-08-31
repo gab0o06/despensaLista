@@ -24,7 +24,7 @@ interface ShopData {
   lastActivity: Date;
 }
 
-export default function myShops() {
+export default function MyShops() {
   const [shops, setShops] = useState<ShopData[]>([]);
   const [loading, setLoading] = useState(true);
 

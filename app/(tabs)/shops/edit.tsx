@@ -18,7 +18,7 @@ import { Button } from "../../../components/Btn";
 import { auth, db } from "../../../utils/firebase";
 import { categories } from "../../../constants/shopCategories";
 
-export default function editShop() {
+export default function EditShop() {
   const [nameShop, setNameShop] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -60,7 +60,6 @@ export default function editShop() {
         lastActivity: serverTimestamp(),
       });
       router.back();
-      console.log("Shop updated successfully");
     } catch (error) {
       console.error("Error updating shop:", error);
       Alert.alert(
@@ -72,27 +71,24 @@ export default function editShop() {
     }
   };
 
-  const fetchShopData = async () => {
-    setFetching(true);
-    try {
-      const shopDoc = await getDoc(doc(db, "shops", id));
-      if (shopDoc.exists()) {
-        const shopData = shopDoc.data();
-        setNameShop(shopData.name || "");
-        setCategory(shopData.category || "");
-        setDescription(shopData.description || "");
-      } else {
-        console.log("No such document!");
-      }
-    } catch (error) {
-      console.error("Error fetching shop data:", error);
-    } finally {
-      setFetching(false);
-    }
-  };
-
   useFocusEffect(
     useCallback(() => {
+      const fetchShopData = async () => {
+        setFetching(true);
+        try {
+          const shopDoc = await getDoc(doc(db, "shops", id));
+          if (shopDoc.exists()) {
+            const shopData = shopDoc.data();
+            setNameShop(shopData.name || "");
+            setCategory(shopData.category || "");
+            setDescription(shopData.description || "");
+          }
+        } catch (error) {
+          console.error("Error fetching shop data:", error);
+        } finally {
+          setFetching(false);
+        }
+      };
       if (id) {
         fetchShopData();
       }

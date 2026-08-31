@@ -17,7 +17,7 @@ import { FormText } from "../../../../components/FormText";
 import { Button } from "../../../../components/Btn";
 import { auth, db } from "../../../../utils/firebase";
 
-export default function editItem() {
+export default function EditItem() {
   const [nameItem, setNameItem] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -77,7 +77,6 @@ export default function editItem() {
         diaCompra: recurrence === "Semanal" ? dayShopping : null,
       });
       router.back();
-      console.log("Item edited successfully");
     } catch (error) {
       console.error("Error editing item:", error);
       Alert.alert(
@@ -89,28 +88,27 @@ export default function editItem() {
     }
   };
 
-  const fetchProductData = async () => {
-    try {
-      setFetching(true);
-      const productDoc = await getDoc(doc(db, "products", productId));
-      if (productDoc.exists()) {
-        const productData = productDoc.data();
-        setNameItem(productData.name);
-        setCategory(productData.category);
-        setQuantity(productData.cantidad.toString());
-        setRecurrence(productData.recurrence);
-        setPrice(productData.precio.toString());
-        setDayShopping(productData.diaCompra || "");
-      }
-    } catch (err) {
-      console.error("Error fetching product data:", err);
-    } finally {
-      setFetching(false);
-    }
-  };
-
   useFocusEffect(
     useCallback(() => {
+      const fetchProductData = async () => {
+        try {
+          setFetching(true);
+          const productDoc = await getDoc(doc(db, "products", productId));
+          if (productDoc.exists()) {
+            const productData = productDoc.data();
+            setNameItem(productData.name);
+            setCategory(productData.category);
+            setQuantity(productData.cantidad.toString());
+            setRecurrence(productData.recurrence);
+            setPrice(productData.precio.toString());
+            setDayShopping(productData.diaCompra || "");
+          }
+        } catch (err) {
+          console.error("Error fetching product data:", err);
+        } finally {
+          setFetching(false);
+        }
+      };
       fetchProductData();
       return () => {};
     }, [productId]),

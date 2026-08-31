@@ -15,9 +15,37 @@ import { GoogleBtn } from "../../components/GoogleBtn";
 import { Button } from "../../components/Btn";
 import { useState } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../utils/firebase";
 
 export default function LoginScreen() {
   const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    console.log("Login button pressed");
+    setLoading(true);
+    if (email.trim() === "" || password.trim() === "" || !email || !password) {
+      alert("Please fill in both email and password fields.");
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err: any) {
+      if (err.code === "auth/invalid-credential") {
+        alert("Invalid email or password.");
+      } else if (err.code === "auth/too-many-requests") {
+        alert("Too many login attempts. Please try again later.");
+      } else {
+        alert("An error occurred during login. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -32,8 +60,20 @@ export default function LoginScreen() {
         />
 
         <View style={styles.formContainer}>
-          <FormText type="text" label="EMAIL" placeholder="example@gmail.com" />
-          <FormText type="password" label="PASSWORD" placeholder="••••••••" />
+          <FormText
+            type="text"
+            label="EMAIL"
+            placeholder="example@gmail.com"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <FormText
+            type="password"
+            label="PASSWORD"
+            placeholder="••••••••"
+            value={password}
+            onChangeText={setPassword}
+          />
           <View style={styles.footerContainer}>
             <TouchableOpacity
               style={styles.rememberMe}
@@ -50,11 +90,15 @@ export default function LoginScreen() {
           </View>
 
           <GoogleBtn text="LOG IN WITH GOOGLE" action="login" />
-          <Button title="LOG IN" onPress={() => {}} />
+          <Button
+            title={loading ? "LOADING..." : "LOG IN"}
+            onPress={handleLogin}
+            disabled={loading}
+          />
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Don't have an account? </Text>
+          <Text style={styles.footerText}>{"Don't have an account? "}</Text>
           <Link href="/signup" asChild>
             <TouchableOpacity>
               <Text style={styles.signupText}>SIGN UP</Text>

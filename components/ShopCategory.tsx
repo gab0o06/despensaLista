@@ -1,6 +1,5 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Colors } from "../constants/theme";
-import { useState } from "react";
 
 interface ShopCategoryProps {
   name: string;

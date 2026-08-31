@@ -7,7 +7,9 @@
     "android": "expo run:android",
     "tunel": "expo start --tunnel",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@expo-google-fonts/sen": "^0.4.2",
@@ -43,6 +45,9 @@
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "~10.0.0",
+    "prettier": "^3.9.6",
     "typescript": "~5.9.2"
   },
   "private": true

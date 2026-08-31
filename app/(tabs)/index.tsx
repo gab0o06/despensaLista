@@ -1,4 +1,10 @@
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { Colors } from "../../constants/theme";
 import { Image } from "expo-image";
 import Fontisto from "@expo/vector-icons/Fontisto";
@@ -22,15 +28,6 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { useFocusEffect } from "expo-router";
-
-interface Shop {
-  members: string[];
-  name: string;
-  category: string;
-  description: string;
-  createdAt: Timestamp;
-  lastActivity: Timestamp;
-}
 
 interface Product {
   id: string;
@@ -136,6 +133,7 @@ export default function HomeScreen() {
       );
       setProductsToday(productsWithShops);
     } catch (err) {
+      alert("Error fetching products");
       console.error("Error fetching products: ", err);
     } finally {
       setLoading(false);
@@ -197,13 +195,25 @@ export default function HomeScreen() {
       );
     }
   };
-
   useFocusEffect(
     useCallback(() => {
       fetchInfoProductsToday();
       return () => {};
     }, []),
   );
+
+  if (loading) {
+    return (
+      <View style={styles.body}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={Colors.dark.secondary} />
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={[styles.header, styles.paddingScreen]}>
@@ -266,7 +276,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.paddingScreen}>
           <View style={styles.shop}>
-            <Text style={styles.title}>Today's Shop</Text>
+            <Text style={styles.title}>{"Today's Shop"}</Text>
             <SeeAllBtn />
           </View>
           <View style={{ gap: 16 }}>
@@ -303,6 +313,10 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    backgroundColor: Colors.dark.background,
+  },
   container: {
     flex: 1,
     flexDirection: "column",

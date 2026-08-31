@@ -6,11 +6,7 @@ import {
   isSuccessResponse,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-import {
-  GoogleAuthProvider,
-  signInWithCredential,
-  getAdditionalUserInfo,
-} from "firebase/auth";
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 
 import { auth, db } from "../utils/firebase";
 import { Colors } from "../constants/theme";
@@ -21,24 +17,20 @@ interface GoogleBtnProps {
   action?: "signin" | "login";
 }
 
-export const GoogleBtn = ({ text, action }: GoogleBtnProps) => {
+export const GoogleBtn = ({ text }: GoogleBtnProps) => {
   const handleGoogleSignIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       if (isSuccessResponse(userInfo)) {
         const {
-          data: {
-            idToken,
-            user: { email, name, photo },
-          },
+          data: { idToken },
         } = userInfo;
 
         if (!idToken) return console.error("No idToken found");
 
         const credential = GoogleAuthProvider.credential(idToken);
         const result = await signInWithCredential(auth, credential);
-        const details = getAdditionalUserInfo(result);
 
         await setDoc(
           doc(db, "users", result.user.uid),
@@ -56,7 +48,6 @@ export const GoogleBtn = ({ text, action }: GoogleBtnProps) => {
           { merge: true },
         );
 
-        console.log("User signed in with Google:", { email, name, photo });
         router.replace("/(tabs)");
       }
     } catch (error: any) {

@@ -8,7 +8,7 @@ import { auth, db } from "../../../utils/firebase";
 import { doc, deleteDoc } from "firebase/firestore";
 import { useState } from "react";
 
-export default function deleteShop() {
+export default function DeleteShop() {
   const userId = auth.currentUser?.uid;
   const route = useRouter();
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,6 @@ export default function deleteShop() {
     route.replace("/(tabs)/shops");
     try {
       await deleteDoc(doc(db, "shops", id));
-      console.log("Shop deleted successfully");
     } catch (error) {
       console.error("Error deleting shop: ", error);
     } finally {

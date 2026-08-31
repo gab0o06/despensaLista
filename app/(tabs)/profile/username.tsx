@@ -6,7 +6,7 @@ import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { FormText } from "../../../components/FormText";
 import { Button } from "../../../components/Btn";
 import { useState } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../utils/firebase";
 import { useRouter } from "expo-router";
 

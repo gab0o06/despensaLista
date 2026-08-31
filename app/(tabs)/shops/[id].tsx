@@ -62,47 +62,45 @@ export default function ShopTemplateInfo() {
   const [products, setProducts] = useState<Product[] | null>([]);
   const shopId = useLocalSearchParams<{ id: string }>().id;
 
-  const shopInfo = async () => {
-    setLoading(true);
-
-    try {
-      const userId = auth.currentUser?.uid;
-      if (!userId) {
-        console.error("User is not authenticated.");
-        return;
-      }
-
-      const shopDoc = await getDoc(doc(db, "shops", shopId));
-      if (shopDoc.exists()) {
-        const shopData = shopDoc.data();
-        console.log("Shop Data:", shopData);
-        setShop(shopData as Shop);
-      }
-
-      const queryp = query(
-        collection(db, "products"),
-        where("shopId", "==", shopId),
-        where("members", "array-contains", userId),
-      );
-
-      const querySnapshot = await getDocs(queryp);
-
-      const productData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      console.log("Product Data:", productData);
-      setProducts(productData as Product[]);
-    } catch (err) {
-      console.error("Error fetching products data:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useFocusEffect(
     useCallback(() => {
+      const shopInfo = async () => {
+        setLoading(true);
+
+        try {
+          const userId = auth.currentUser?.uid;
+          if (!userId) {
+            console.error("User is not authenticated.");
+            return;
+          }
+
+          const shopDoc = await getDoc(doc(db, "shops", shopId));
+          if (shopDoc.exists()) {
+            const shopData = shopDoc.data();
+            setShop(shopData as Shop);
+          }
+
+          const queryp = query(
+            collection(db, "products"),
+            where("shopId", "==", shopId),
+            where("members", "array-contains", userId),
+          );
+
+          const querySnapshot = await getDocs(queryp);
+
+          const productData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setProducts(productData as Product[]);
+        } catch (err) {
+          console.error("Error fetching products data:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
+
       shopInfo();
       return () => {};
     }, [shopId]),

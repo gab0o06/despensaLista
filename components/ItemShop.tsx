@@ -14,7 +14,6 @@ interface ItemShopProps {
 
 export const ItemShop = ({
   id,
-  category,
   name,
   price,
   quantity,

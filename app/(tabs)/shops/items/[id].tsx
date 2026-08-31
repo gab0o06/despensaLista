@@ -57,26 +57,24 @@ export default function ItemTemplateInfo() {
     D: "Domingo",
   };
 
-  const productInfo = async () => {
-    setLoading(true);
-
-    try {
-      const productDoc = await getDoc(doc(db, "products", productId));
-      if (productDoc.exists()) {
-        const productData = productDoc.data();
-        console.log("Product Data:", productData);
-        setProduct(productData as Product);
-        setQuantity(productData.cantidad);
-      }
-    } catch (err) {
-      console.error("Error fetching products data:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useFocusEffect(
     useCallback(() => {
+      const productInfo = async () => {
+        setLoading(true);
+
+        try {
+          const productDoc = await getDoc(doc(db, "products", productId));
+          if (productDoc.exists()) {
+            const productData = productDoc.data();
+            setProduct(productData as Product);
+            setQuantity(productData.cantidad);
+          }
+        } catch (err) {
+          console.error("Error fetching products data:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
       productInfo();
       return () => {};
     }, [productId]),
@@ -161,7 +159,7 @@ export default function ItemTemplateInfo() {
             ${product?.precio.toFixed(2)}
           </Text>
           <Text style={styles.productInfoText}>
-            {product?.recurrence == "Semanal" && product?.diaCompra
+            {product?.recurrence === "Semanal" && product?.diaCompra
               ? days[product?.diaCompra] || "N/A"
               : "N/A"}
           </Text>

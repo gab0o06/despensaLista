@@ -17,7 +17,7 @@ import { Button } from "../../../components/Btn";
 import { auth, db } from "../../../utils/firebase";
 import { categories } from "../../../constants/shopCategories";
 
-export default function createShop() {
+export default function CreateShop() {
   const [nameShop, setNameShop] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -58,7 +58,6 @@ export default function createShop() {
         lastActivity: serverTimestamp(),
       });
       router.back();
-      console.log("Shop created successfully");
     } catch (error) {
       console.error("Error creating shop:", error);
       Alert.alert(

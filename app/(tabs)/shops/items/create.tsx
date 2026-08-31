@@ -22,7 +22,7 @@ import { FormText } from "../../../../components/FormText";
 import { Button } from "../../../../components/Btn";
 import { auth, db } from "../../../../utils/firebase";
 
-export default function createItem() {
+export default function CreateItem() {
   const [nameItem, setNameItem] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -111,7 +111,6 @@ export default function createItem() {
         lastActivity: serverTimestamp(),
       });
       router.back();
-      console.log("Item created successfully");
     } catch (error) {
       console.error("Error creating item:", error);
       Alert.alert(

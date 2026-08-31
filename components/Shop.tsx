@@ -28,8 +28,6 @@ export const Shop = ({
   name,
   description,
   lastActivity,
-  createdAt,
-  members,
   category,
 }: ShopProps) => {
   const router = useRouter();
