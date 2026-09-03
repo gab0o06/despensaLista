@@ -4,17 +4,98 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Colors } from "../../constants/theme";
 import { Link } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
+import { useState } from "react";
 
 import { HeaderUserActions } from "../../components/HeaderUserActions";
 import { FormText } from "../../components/FormText";
 import { GoogleBtn } from "../../components/GoogleBtn";
 import { Button } from "../../components/Btn";
+import { auth, db } from "../../utils/firebase";
+import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function SingUpScreen() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async () => {
+    if (
+      email.trim() === "" ||
+      password.trim() === "" ||
+      !email ||
+      !password ||
+      username.trim() === "" ||
+      !username ||
+      confirmPassword.trim() === "" ||
+      !confirmPassword
+    ) {
+      Alert.alert("ERROR", "Please fill all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert("ERROR", "Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      try {
+        await setDoc(
+          doc(db, "users", result.user.uid),
+          {
+            username,
+            email: result.user.email,
+            photoURL: "",
+            createdAt: new Date(),
+            lastLogin: new Date(),
+            preferences: {
+              theme: "dark",
+              notifications: true,
+            },
+          },
+          { merge: true },
+        );
+      } catch (profileErr) {
+        await deleteUser(result.user);
+        Alert.alert(
+          "ERROR",
+          "An error occurred while creating your profile. Please try again.",
+        );
+        return;
+      }
+    } catch (err: any) {
+      if (err.code === "auth/email-already-in-use") {
+        Alert.alert("ERROR", "Your email is already in use.");
+      } else if (err.code === "auth/weak-password") {
+        Alert.alert(
+          "ERROR",
+          "Your password is too weak. Please choose a stronger password.",
+        );
+      } else {
+        Alert.alert(
+          "ERROR",
+          "An error occurred during sign up. Please try again.",
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <ScrollView
@@ -33,17 +114,41 @@ export default function SingUpScreen() {
         />
 
         <View style={styles.formContainer}>
-          <GoogleBtn text="SIGN UP WITH GOOGLE" action="signin" />
-          <FormText type="text" label="USERNAME" placeholder="John Doe" />
-          <FormText type="text" label="EMAIL" placeholder="example@gmail.com" />
-          <FormText type="password" label="PASSWORD" placeholder="••••••••" />
+          <FormText
+            type="text"
+            label="USERNAME"
+            placeholder="John Doe"
+            value={username}
+            onChangeText={setUsername}
+          />
+          <FormText
+            type="text"
+            label="EMAIL"
+            placeholder="example@gmail.com"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <FormText
+            type="password"
+            label="PASSWORD"
+            placeholder="••••••••"
+            value={password}
+            onChangeText={setPassword}
+          />
           <FormText
             type="password"
             label="CONFIRM PASSWORD"
             placeholder="••••••••"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
           />
 
-          <Button title="SIGN UP" onPress={() => {}} />
+          <GoogleBtn text="SIGN UP WITH GOOGLE" action="signin" />
+          <Button
+            title={loading ? "LOADING..." : "SIGN UP"}
+            onPress={handleSignup}
+            disabled={loading}
+          />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

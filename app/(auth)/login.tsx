@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Link } from "expo-router";
 import { Colors } from "../../constants/theme";
@@ -25,22 +26,27 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    console.log("Login button pressed");
-    setLoading(true);
     if (email.trim() === "" || password.trim() === "" || !email || !password) {
       alert("Please fill in both email and password fields.");
       return;
     }
 
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err: any) {
       if (err.code === "auth/invalid-credential") {
-        alert("Invalid email or password.");
+        Alert.alert("ERROR", "Invalid email or password.");
       } else if (err.code === "auth/too-many-requests") {
-        alert("Too many login attempts. Please try again later.");
+        Alert.alert(
+          "ERROR",
+          "Too many login attempts. Please try again later.",
+        );
       } else {
-        alert("An error occurred during login. Please try again.");
+        Alert.alert(
+          "ERROR",
+          "An error occurred during login. Please try again.",
+        );
       }
     } finally {
       setLoading(false);

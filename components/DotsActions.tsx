@@ -1,5 +1,5 @@
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 
 import { Entypo } from "@expo/vector-icons";
 
@@ -8,8 +8,8 @@ import { useState } from "react";
 
 interface DotsActionsProps {
   route: ReturnType<typeof useRouter>;
-  pathEdit: string;
-  pathDelete: string;
+  pathEdit: Href;
+  pathDelete: Href;
 }
 
 export const DotsActions = ({

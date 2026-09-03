@@ -156,7 +156,7 @@ export default function ItemTemplateInfo() {
         <View style={[styles.productInfoContainer, { gap: 40, marginTop: 6 }]}>
           <Text style={styles.productInfoText}>{product?.recurrence}</Text>
           <Text style={styles.productInfoText}>
-            ${product?.precio.toFixed(2)}
+            ${product?.precio?.toFixed(2) || "0.00"}
           </Text>
           <Text style={styles.productInfoText}>
             {product?.recurrence === "Semanal" && product?.diaCompra

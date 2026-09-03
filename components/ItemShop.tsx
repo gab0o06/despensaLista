@@ -19,9 +19,16 @@ export const ItemShop = ({
   quantity,
   shopName,
 }: ItemShopProps) => {
+  if (!id) {
+    return (
+      <View style={styles.mainItemsListContainer}>
+        <Text style={{ color: "white" }}>No hay productos disponibles.</Text>
+      </View>
+    );
+  }
   return (
     <Link
-      href={{ pathname: `/shops/items/${id}`, params: { shopName } }}
+      href={{ pathname: `/shops/items/[id]`, params: { id, shopName } }}
       asChild
     >
       <TouchableOpacity>

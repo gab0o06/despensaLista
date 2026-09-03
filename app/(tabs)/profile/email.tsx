@@ -1,16 +1,22 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Alert, ScrollView } from "react-native";
+import { useState } from "react";
+import { useRouter } from "expo-router";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  verifyBeforeUpdateEmail,
+} from "firebase/auth";
 
 import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { FormText } from "../../../components/FormText";
 import { Button } from "../../../components/Btn";
-import { useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../utils/firebase";
-import { useRouter } from "expo-router";
 
 export default function EmailChange() {
   const [email, setEmail] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -24,36 +30,71 @@ export default function EmailChange() {
     const user = auth.currentUser;
 
     if (!user) {
-      alert("No user is currently signed in.");
+      Alert.alert("ERROR", "No user is currently signed in.");
       return router.push("/(auth)/login");
     }
 
+    if (currentPassword.trim() === "" || !currentPassword) {
+      return Alert.alert("ERROR", "Por favor, introduce tu contraseña actual.");
+    }
+
     if (!isValidEmail(email))
-      return alert("Por favor, introduce un correo electrónico válido.");
+      return Alert.alert(
+        "ERROR",
+        "Por favor, introduce un correo electrónico válido.",
+      );
 
     if (email !== confirmEmail)
-      return alert(
+      return Alert.alert(
+        "ERROR",
         "Los correos electrónicos no coinciden. Por favor, verifica.",
       );
 
     try {
       setLoading(true);
+      const cred = EmailAuthProvider.credential(user.email!, currentPassword);
+      await reauthenticateWithCredential(user, cred);
+
       const userRef = doc(db, "users", user.uid);
+      await verifyBeforeUpdateEmail(user, email);
+      Alert.alert(
+        "ÉXITO",
+        "Se ha enviado un correo de verificación a tu nuevo email.",
+      );
 
       await updateDoc(userRef, {
         email: email,
       });
-      //   alert("Username actualizado correctamente.");
       router.back();
-    } catch (err) {
-      console.error("Error updating username: ", err);
+    } catch (err: any) {
+      if (err.code === "auth/wrong-password") {
+        Alert.alert(
+          "ERROR",
+          "Contraseña incorrecta. Por favor, inténtalo de nuevo.",
+        );
+      } else if (err.code === "auth/invalid-credential") {
+        Alert.alert(
+          "ERROR",
+          "Credenciales inválidas. Por favor, inténtalo de nuevo.",
+        );
+      } else {
+        Alert.alert(
+          "ERROR",
+          "Error al actualizar el correo electrónico. Por favor, inténtalo de nuevo.",
+        );
+      }
+      console.error("Error updating email: ", err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View style={styles.body}>
+    <ScrollView
+      contentContainerStyle={styles.body}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
       <HeaderShopsBack
         title="Email"
         subtitle="Gestiona tu dirección de correo de la cuenta"
@@ -66,6 +107,13 @@ export default function EmailChange() {
           </View>
         </View>
         <View style={styles.mainInputFormContainer}>
+          <FormText
+            type="password"
+            label="CONTRASEÑA ACTUAL"
+            placeholder="••••••••"
+            value={currentPassword}
+            onChangeText={setCurrentPassword}
+          />
           <FormText
             type="text"
             label="NUEVO CORREO"
@@ -85,20 +133,22 @@ export default function EmailChange() {
         </View>
       </View>
       <Button
-        title={loading ? "GUARDANDO..." : "GUARDAR"}
+        title={loading ? "ENVIANDO..." : "ENVIAR LINK"}
         onPress={handleEmailChange}
         backgroundColor={Colors.dark.secondary}
         disabled={loading}
       />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   body: {
-    flex: 1,
+    flexGrow: 1,
+
     backgroundColor: Colors.dark.background,
     paddingHorizontal: 20,
+    paddingBottom: 120,
   },
   mainFormContainer: {
     marginTop: 10,

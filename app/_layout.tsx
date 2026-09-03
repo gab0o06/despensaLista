@@ -43,7 +43,7 @@ export default function RootLayout() {
 
     if (user && inAuthGroup) {
       router.replace({
-        pathname: "/(tabs)/",
+        pathname: "/(tabs)",
       });
     } else if (!user && !inAuthGroup) {
       router.replace("/(auth)/login");
