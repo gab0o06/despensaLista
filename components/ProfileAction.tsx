@@ -38,11 +38,11 @@ export const ProfileAction = ({
           }
         >
           {icon === "userFont" ? (
-            <FontAwesome6 name="user" size={24} color="white" />
+            <FontAwesome6 name="user" size={24} color={colors.text} />
           ) : icon === "bullhorn" ? (
-            <FontAwesome6 name="bullhorn" size={24} color="white" />
+            <FontAwesome6 name="bullhorn" size={24} color={colors.text} />
           ) : (
-            <Feather name={icon} size={24} color="white" />
+            <Feather name={icon} size={24} color={colors.text} />
           )}
         </View>
         <View>
@@ -55,10 +55,10 @@ export const ProfileAction = ({
             value={value}
             onValueChange={onValueChange}
             trackColor={{ false: colors.text, true: colors.text }}
-            thumbColor={value ? colors.secondary : colors.text}
+            thumbColor={value ? colors.searchText : colors.text}
           />
         ) : (
-          <Entypo name="chevron-right" size={40} color="white" />
+          <Entypo name="chevron-right" size={40} color={colors.text} />
         )}
       </View>
     </TouchableOpacity>
@@ -69,12 +69,12 @@ const getStyles = (colors: typeof Colors.dark) =>
   StyleSheet.create({
     mainCategoryText: {
       fontSize: 20,
-      color: "white",
+      color: colors.text,
     },
     mainActionContainer: {
       flexDirection: "row",
       flexWrap: "wrap",
-      backgroundColor: colors.surface,
+      backgroundColor: colors.elementBackground,
       borderRadius: 8,
       justifyContent: "space-between",
       alignItems: "center",
@@ -91,20 +91,20 @@ const getStyles = (colors: typeof Colors.dark) =>
       width: 60,
       height: 60,
       borderRadius: 30,
-      backgroundColor: "#535353",
+      backgroundColor: colors.iconsUserColor,
       alignItems: "center",
       justifyContent: "center",
     },
     mainActionName: {
       fontSize: 24,
-      color: "white",
+      color: colors.text,
       fontFamily: "Sen_700Bold",
     },
     logOutActionImgContainer: {
       width: 60,
       height: 60,
       borderRadius: 30,
-      backgroundColor: colors.surface,
+      backgroundColor: colors.elementBackground,
       alignItems: "center",
       justifyContent: "center",
     },

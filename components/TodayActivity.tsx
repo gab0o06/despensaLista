@@ -46,7 +46,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      backgroundColor: colors.surface,
+      backgroundColor: colors.elementBackground,
       borderRadius: 8,
       padding: 15,
     },
@@ -56,7 +56,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       gap: 15,
     },
     shopIcon: {
-      backgroundColor: colors.accent,
+      backgroundColor: colors.accentText,
       borderRadius: 8,
       padding: 8,
     },
@@ -78,7 +78,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       opacity: 1,
     },
     checkedIcon: {
-      backgroundColor: colors.accent,
+      backgroundColor: colors.accentText,
       opacity: 1,
     },
   });

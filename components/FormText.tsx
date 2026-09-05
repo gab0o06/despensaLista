@@ -53,7 +53,7 @@ export const FormText = ({
           ]}
           multiline={type === "desc"}
           textAlignVertical={type === "desc" ? "top" : "center"}
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={colors.searchText}
         />
         {type === "password" ? (
           <TouchableOpacity
@@ -65,7 +65,7 @@ export const FormText = ({
             <Ionicons
               name={active ? "eye" : "eye-off"}
               size={24}
-              color={colors.textMuted}
+              color={colors.searchText}
             />
           </TouchableOpacity>
         ) : null}

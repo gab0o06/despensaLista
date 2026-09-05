@@ -22,7 +22,7 @@ export const HeaderShopsBack = ({ title, subtitle }: HeaderShopsBackProps) => {
           activeOpacity={0.7}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color="black" />
+          <Entypo name="chevron-left" size={30} color={colors.background} />
         </TouchableOpacity>
         <Image
           source={require("../assets/LogoApp.svg")}
@@ -52,7 +52,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       width: 50,
       height: 50,
       borderRadius: 30,
-      backgroundColor: colors.text,
+      backgroundColor: colors.icons,
       justifyContent: "center",
       alignItems: "center",
     },
@@ -70,7 +70,7 @@ const getStyles = (colors: typeof Colors.dark) =>
     subtitle: {
       fontSize: 20,
       fontFamily: "Sen_400Regular",
-      color: colors.textMuted,
+      color: colors.searchText,
       textAlign: "center",
     },
   });

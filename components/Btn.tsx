@@ -37,14 +37,14 @@ export const Button = ({
 const getStyles = (colors: typeof Colors.dark) =>
   StyleSheet.create({
     primaryButton: {
-      backgroundColor: colors.primary,
+      backgroundColor: colors.action,
       paddingVertical: 24,
       borderRadius: 8,
       alignItems: "center",
       marginTop: 10,
     },
     primaryButtonText: {
-      color: colors.text,
+      color: "#F4F7F6",
       fontSize: 16,
       fontFamily: "Sen_700Bold",
     },

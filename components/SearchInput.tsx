@@ -12,11 +12,11 @@ export const SearchInput = ({ placeholder }: SearchInputProps) => {
   const styles = getStyles(colors);
   return (
     <View style={styles.searchContainer}>
-      <Fontisto name="search" size={24} color="white" />
+      <Fontisto name="search" size={24} color={colors.icons} />
       <TextInput
         placeholder={placeholder}
         style={styles.searchInput}
-        placeholderTextColor={colors.textMuted}
+        placeholderTextColor={colors.searchText}
       />
     </View>
   );

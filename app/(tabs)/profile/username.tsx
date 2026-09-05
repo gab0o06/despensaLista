@@ -71,11 +71,11 @@ export default function UsernameChange() {
           <Ionicons
             name="information-circle"
             size={30}
-            color={colors.textMuted}
+            color={colors.searchText}
           />
           <Text
             style={{
-              color: colors.textMuted,
+              color: colors.searchText,
               fontFamily: "Sen_400Regular",
               flex: 1,
               flexWrap: "wrap",
@@ -89,7 +89,7 @@ export default function UsernameChange() {
       <Button
         title={loading ? "GUARDANDO..." : "GUARDAR"}
         onPress={handleUsernameChange}
-        backgroundColor={colors.secondary}
+        backgroundColor={colors.action}
         disabled={loading}
       />
     </View>

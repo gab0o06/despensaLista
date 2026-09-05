@@ -211,7 +211,7 @@ export default function HomeScreen() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={colors.secondary} />
+          <ActivityIndicator size="large" color={colors.secondaryText} />
         </View>
       </View>
     );
@@ -227,7 +227,7 @@ export default function HomeScreen() {
         <Fontisto
           name="bell-alt"
           size={24}
-          color="white"
+          color={colors.icons}
           style={{ marginRight: 10 }}
         />
       </View>
@@ -240,15 +240,14 @@ export default function HomeScreen() {
       >
         <View style={[{ gap: 20 }, styles.paddingScreen]}>
           <Text style={styles.title}>
-            <Text style={{ color: colors.accent }}>Hi</Text> {username}, Good
-            Afternoon!
+            <Text style={{ color: colors.accentText }}>Hi</Text> {username},
+            Good Afternoon!
           </Text>
           <SearchInput placeholder="Search Shop and Activities" />
         </View>
         <View>
           <View style={[styles.shop, styles.paddingScreen]}>
             <Text style={styles.title}>Shop</Text>
-            {/* <SeeAllBtn /> */}
           </View>
           <ScrollView
             horizontal

@@ -80,7 +80,7 @@ export default function TabLayout() {
 const getStyles = (colors: typeof Colors.dark) =>
   StyleSheet.create({
     tabBar: {
-      backgroundColor: colors.bar,
+      backgroundColor: colors.barMenu,
       height: 70,
       position: "absolute",
       bottom: 0,
@@ -112,8 +112,8 @@ const getStyles = (colors: typeof Colors.dark) =>
       width: 65,
       height: 65,
       borderRadius: 30,
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.action,
       borderWidth: 10,
-      borderColor: colors.bar,
+      borderColor: colors.barMenu,
     },
   });

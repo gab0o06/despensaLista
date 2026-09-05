@@ -21,7 +21,7 @@ export const ShopCategory = ({
     <TouchableOpacity
       style={
         isPressed
-          ? [styles.categoryContainer, { backgroundColor: colors.accent }]
+          ? [styles.categoryContainer, { backgroundColor: colors.accentText }]
           : styles.categoryContainer
       }
       activeOpacity={0.7}
@@ -38,7 +38,7 @@ export const ShopCategory = ({
 const getStyles = (colors: typeof Colors.dark) =>
   StyleSheet.create({
     categoryContainer: {
-      backgroundColor: colors.surface,
+      backgroundColor: colors.elementBackground,
       padding: 8,
       borderRadius: 32,
       flexDirection: "row",
@@ -49,7 +49,7 @@ const getStyles = (colors: typeof Colors.dark) =>
     categoryImage: {
       width: 40,
       height: 40,
-      backgroundColor: colors.textMuted,
+      backgroundColor: colors.searchText,
       borderRadius: 20,
     },
     categoryImageText: {

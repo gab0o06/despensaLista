@@ -138,7 +138,7 @@ export default function EmailChange() {
       <Button
         title={loading ? "ENVIANDO..." : "ENVIAR LINK"}
         onPress={handleEmailChange}
-        backgroundColor={colors.secondary}
+        backgroundColor={colors.action}
         disabled={loading}
       />
     </ScrollView>
@@ -159,7 +159,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       gap: 16,
     },
     infoText: {
-      color: colors.textMuted,
+      color: colors.searchText,
       fontFamily: "Sen_400Regular",
       fontSize: 14,
     },
@@ -179,7 +179,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       paddingHorizontal: 16,
     },
     inputText: {
-      color: colors.textMuted,
+      color: colors.searchText,
       fontFamily: "Sen_400Regular",
       fontSize: 20,
     },
