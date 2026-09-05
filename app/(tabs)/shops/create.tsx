@@ -16,6 +16,7 @@ import { FormText } from "../../../components/FormText";
 import { Button } from "../../../components/Btn";
 import { auth, db } from "../../../utils/firebase";
 import { categories } from "../../../constants/shopCategories";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 export default function CreateShop() {
   const [nameShop, setNameShop] = useState("");
@@ -24,6 +25,8 @@ export default function CreateShop() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const handleCreateShop = async () => {
     if (
@@ -100,7 +103,7 @@ export default function CreateShop() {
                 style={[
                   styles.categoryItem,
                   category === item.name && {
-                    backgroundColor: Colors.dark.secondary,
+                    backgroundColor: colors.secondary,
                   },
                 ]}
               >
@@ -126,7 +129,7 @@ export default function CreateShop() {
         />
         <Button
           title={loading ? "Creating..." : "Create Shop"}
-          backgroundColor={Colors.dark.secondary}
+          backgroundColor={colors.secondary}
           onPress={handleCreateShop}
           disabled={loading}
         />
@@ -135,51 +138,52 @@ export default function CreateShop() {
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-  },
-  formContainer: {
-    gap: 16,
-    marginBottom: 120,
-  },
-  inputContainer: {
-    gap: 16,
-  },
-  inputLabel: {
-    color: Colors.dark.text,
-    fontFamily: "Sen_400Regular",
-    fontSize: 16,
-  },
-  inputTextContainer: {
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    alignItems: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-    gap: 10,
-  },
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    formContainer: {
+      gap: 16,
+      marginBottom: 120,
+    },
+    inputContainer: {
+      gap: 16,
+    },
+    inputLabel: {
+      color: colors.text,
+      fontFamily: "Sen_400Regular",
+      fontSize: 16,
+    },
+    inputTextContainer: {
+      paddingVertical: 12,
+      paddingHorizontal: 8,
+      borderRadius: 8,
+      alignItems: "center",
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "flex-start",
+      gap: 10,
+    },
 
-  categoryItem: {
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: Colors.dark.secondary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  categoryText: {
-    color: "#888",
-    fontFamily: "Sen_400Regular",
-    fontSize: 14,
-  },
-  categoryTextSelected: {
-    color: Colors.dark.text,
-    fontFamily: "Sen_700Bold",
-  },
-});
+    categoryItem: {
+      paddingVertical: 8,
+      paddingHorizontal: 8,
+      borderRadius: 20,
+      borderWidth: 1,
+      borderColor: colors.secondary,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    categoryText: {
+      color: "#888",
+      fontFamily: "Sen_400Regular",
+      fontSize: 14,
+    },
+    categoryTextSelected: {
+      color: colors.text,
+      fontFamily: "Sen_700Bold",
+    },
+  });

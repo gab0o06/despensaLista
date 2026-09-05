@@ -21,6 +21,7 @@ import { HeaderShopsBack } from "../../../../components/HeaderShopsBack";
 import { FormText } from "../../../../components/FormText";
 import { Button } from "../../../../components/Btn";
 import { auth, db } from "../../../../utils/firebase";
+import { useTheme } from "../../../../contexts/ThemeContext";
 
 export default function CreateItem() {
   const [nameItem, setNameItem] = useState("");
@@ -34,6 +35,9 @@ export default function CreateItem() {
   const shopId = useLocalSearchParams<{ shopId: string }>().shopId;
 
   const router = useRouter();
+
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const recurrenceOptions = ["Diaria", "Semanal", "Mensual", "Anual"];
   const dayShoppingOptions = ["L", "M", "Mi", "J", "V", "S", "D"];
@@ -102,7 +106,9 @@ export default function CreateItem() {
         name: nameItem,
         category,
         cantidad: finalQuantity,
-        recurrence: recurrence === "Semanal" ? dayShopping : recurrence,
+        recurrence,
+        diaCompra: recurrence === "Semanal" ? dayShopping : null,
+        agotado: finalQuantity === 0,
         compradoEn: serverTimestamp(),
         precio: finalPrice,
         creator: user.uid,
@@ -220,7 +226,7 @@ export default function CreateItem() {
         />
         <Button
           title={loading ? "Creating..." : "CREATE ITEM"}
-          backgroundColor={Colors.dark.secondary}
+          backgroundColor={colors.secondary}
           onPress={handleCreateItem}
           disabled={loading}
         />
@@ -229,68 +235,69 @@ export default function CreateItem() {
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-  },
-  formContainer: {
-    gap: 16,
-    marginBottom: 120,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    gap: 16,
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  inputLabel: {
-    color: Colors.dark.text,
-    fontFamily: "Sen_400Regular",
-    fontSize: 16,
-    marginBottom: 8,
-  },
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    formContainer: {
+      gap: 16,
+      marginBottom: 120,
+    },
+    inputContainer: {
+      flexDirection: "row",
+      gap: 16,
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    inputLabel: {
+      color: colors.text,
+      fontFamily: "Sen_400Regular",
+      fontSize: 16,
+      marginBottom: 8,
+    },
 
-  fullWidth: {
-    width: "100%",
-  },
-  optionsContainer: {
-    flexDirection: "row",
-    gap: 10,
-    flexWrap: "wrap",
-  },
-  optionItem: {
-    flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: Colors.dark.search,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  optionsContainerDays: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-  },
-  optionItemCircle: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    borderWidth: 1,
-    borderColor: Colors.dark.search,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  optionItemSelected: {
-    backgroundColor: Colors.dark.secondary,
-    borderColor: Colors.dark.secondary,
-  },
-  optionText: {
-    color: Colors.dark.text,
-    fontFamily: "Sen_400Regular",
-    fontSize: 12,
-  },
-});
+    fullWidth: {
+      width: "100%",
+    },
+    optionsContainer: {
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+    },
+    optionItem: {
+      flex: 1,
+      paddingVertical: 8,
+      paddingHorizontal: 10,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: colors.search,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    optionsContainerDays: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      flexWrap: "wrap",
+    },
+    optionItemCircle: {
+      width: 42,
+      height: 42,
+      borderRadius: 21,
+      borderWidth: 1,
+      borderColor: colors.search,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    optionItemSelected: {
+      backgroundColor: colors.secondary,
+      borderColor: colors.secondary,
+    },
+    optionText: {
+      color: colors.text,
+      fontFamily: "Sen_400Regular",
+      fontSize: 12,
+    },
+  });

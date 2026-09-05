@@ -7,12 +7,15 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { auth, db } from "../../../utils/firebase";
 import { doc, deleteDoc } from "firebase/firestore";
 import { useState } from "react";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 export default function DeleteShop() {
   const userId = auth.currentUser?.uid;
   const route = useRouter();
   const [loading, setLoading] = useState(false);
   const id = useLocalSearchParams<{ id: string }>().id;
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const handleDeleteShop = async () => {
     if (!userId) {
@@ -52,13 +55,13 @@ export default function DeleteShop() {
         </View>
         <Button
           title="ELIMINAR"
-          backgroundColor={Colors.dark.error}
+          backgroundColor={colors.error}
           onPress={handleDeleteShop}
           disabled={loading}
         />
         <Button
           title="CANCELAR"
-          backgroundColor={Colors.dark.success}
+          backgroundColor={colors.success}
           onPress={() => {
             route.back();
           }}
@@ -68,33 +71,34 @@ export default function DeleteShop() {
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-  },
-  formContainer: {
-    gap: 16,
-    justifyContent: "center",
-    marginTop: 100,
-    marginBottom: 120,
-  },
-  txtContainer: {
-    marginBottom: 20,
-    flexDirection: "column",
-    alignContent: "center",
-  },
-  title: {
-    fontSize: 40,
-    fontFamily: "Sen_700Bold",
-    color: Colors.dark.text,
-    textAlign: "center",
-  },
-  subtitle: {
-    fontSize: 16,
-    fontFamily: "Sen_400Regular",
-    color: Colors.dark.textMuted,
-    textAlign: "center",
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    formContainer: {
+      gap: 16,
+      justifyContent: "center",
+      marginTop: 100,
+      marginBottom: 120,
+    },
+    txtContainer: {
+      marginBottom: 20,
+      flexDirection: "column",
+      alignContent: "center",
+    },
+    title: {
+      fontSize: 40,
+      fontFamily: "Sen_700Bold",
+      color: colors.text,
+      textAlign: "center",
+    },
+    subtitle: {
+      fontSize: 16,
+      fontFamily: "Sen_400Regular",
+      color: colors.textMuted,
+      textAlign: "center",
+    },
+  });

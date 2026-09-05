@@ -2,15 +2,16 @@ import { View, StyleSheet } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { signOut } from "firebase/auth";
 
+import { useTheme } from "../../../contexts/ThemeContext";
 import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { ProfileAction } from "../../../components/ProfileAction";
 import { auth } from "../../../utils/firebase";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 
 export default function Profile() {
-  const [activeDarkMode, setActiveDarkMode] = useState(false);
+  const { theme, colors, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
 
   const router = useRouter();
 
@@ -57,8 +58,8 @@ export default function Profile() {
             icon="moon"
             nameAction="Dark mode"
             toggle={true}
-            value={activeDarkMode}
-            onValueChange={(value) => setActiveDarkMode(value)}
+            value={theme === "dark"}
+            onValueChange={toggleTheme}
           />
         </View>
         <ProfileAction nameAction="Log Out" onPress={handleLogOut} />
@@ -67,15 +68,16 @@ export default function Profile() {
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-  },
-  mainItemsListContainer: {
-    marginTop: 10,
-    marginBottom: 30,
-    gap: 12,
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    mainItemsListContainer: {
+      marginTop: 10,
+      marginBottom: 30,
+      gap: 12,
+    },
+  });

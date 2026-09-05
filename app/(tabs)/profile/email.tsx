@@ -13,6 +13,7 @@ import { FormText } from "../../../components/FormText";
 import { Button } from "../../../components/Btn";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../utils/firebase";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 export default function EmailChange() {
   const [email, setEmail] = useState("");
@@ -20,6 +21,8 @@ export default function EmailChange() {
   const [confirmEmail, setConfirmEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -135,49 +138,49 @@ export default function EmailChange() {
       <Button
         title={loading ? "ENVIANDO..." : "ENVIAR LINK"}
         onPress={handleEmailChange}
-        backgroundColor={Colors.dark.secondary}
+        backgroundColor={colors.secondary}
         disabled={loading}
       />
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flexGrow: 1,
-
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-    paddingBottom: 120,
-  },
-  mainFormContainer: {
-    marginTop: 10,
-    marginBottom: 30,
-    gap: 16,
-  },
-  infoText: {
-    color: Colors.dark.textMuted,
-    fontFamily: "Sen_400Regular",
-    fontSize: 14,
-  },
-  mainInputFormContainer: {
-    gap: 16,
-  },
-  inputContainer: {
-    gap: 16,
-  },
-  inputLabel: {
-    color: Colors.dark.text,
-    fontFamily: "Sen_400Regular",
-    fontSize: 16,
-  },
-  inputTextContainer: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
-  inputText: {
-    color: Colors.dark.textMuted,
-    fontFamily: "Sen_400Regular",
-    fontSize: 20,
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flexGrow: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+      paddingBottom: 120,
+    },
+    mainFormContainer: {
+      marginTop: 10,
+      marginBottom: 30,
+      gap: 16,
+    },
+    infoText: {
+      color: colors.textMuted,
+      fontFamily: "Sen_400Regular",
+      fontSize: 14,
+    },
+    mainInputFormContainer: {
+      gap: 16,
+    },
+    inputContainer: {
+      gap: 16,
+    },
+    inputLabel: {
+      color: colors.text,
+      fontFamily: "Sen_400Regular",
+      fontSize: 16,
+    },
+    inputTextContainer: {
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+    },
+    inputText: {
+      color: colors.textMuted,
+      fontFamily: "Sen_400Regular",
+      fontSize: 20,
+    },
+  });

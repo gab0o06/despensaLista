@@ -7,6 +7,8 @@ export const Colors = {
     accent: "#6BB841",
     text: "#11181C",
     textMuted: "#627D8B",
+    bar: "#E8ECEE",
+    search: "#E0E0E0",
 
     success: "#7BCBB5",
     warning: "#E6A123",

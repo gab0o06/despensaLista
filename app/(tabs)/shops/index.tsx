@@ -13,6 +13,7 @@ import { Link } from "expo-router";
 import { auth, db } from "../../../utils/firebase";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 interface ShopData {
   id: string;
@@ -27,6 +28,8 @@ interface ShopData {
 export default function MyShops() {
   const [shops, setShops] = useState<ShopData[]>([]);
   const [loading, setLoading] = useState(true);
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   useEffect(() => {
     const userId = auth.currentUser?.uid;
@@ -64,7 +67,7 @@ export default function MyShops() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={Colors.dark.secondary} />
+          <ActivityIndicator size="large" color={colors.secondary} />
         </View>
       </View>
     );
@@ -89,29 +92,30 @@ export default function MyShops() {
       </ScrollView>
       <Link href="/(tabs)/shops/create" asChild>
         <TouchableOpacity style={styles.addShopBtn} activeOpacity={0.8}>
-          <Entypo name="plus" size={24} color={Colors.dark.bar} />
+          <Entypo name="plus" size={24} color={colors.bar} />
         </TouchableOpacity>
       </Link>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-  },
-  addShopBtn: {
-    position: "absolute",
-    bottom: 80,
-    right: 20,
-    zIndex: 10,
-    backgroundColor: Colors.dark.secondary,
-    borderRadius: 16,
-    width: 60,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    addShopBtn: {
+      position: "absolute",
+      bottom: 80,
+      right: 20,
+      zIndex: 10,
+      backgroundColor: colors.secondary,
+      borderRadius: 16,
+      width: 60,
+      height: 60,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });

@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Colors } from "../constants/theme";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface ShopCategoryProps {
   name: string;
@@ -14,11 +15,13 @@ export const ShopCategory = ({
   isPressed,
   onPress,
 }: ShopCategoryProps) => {
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
   return (
     <TouchableOpacity
       style={
         isPressed
-          ? [styles.categoryContainer, { backgroundColor: Colors.dark.accent }]
+          ? [styles.categoryContainer, { backgroundColor: colors.accent }]
           : styles.categoryContainer
       }
       activeOpacity={0.7}
@@ -32,31 +35,32 @@ export const ShopCategory = ({
   );
 };
 
-const styles = StyleSheet.create({
-  categoryContainer: {
-    backgroundColor: Colors.dark.surface,
-    padding: 8,
-    borderRadius: 32,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    minHeight: 60,
-  },
-  categoryImage: {
-    width: 40,
-    height: 40,
-    backgroundColor: Colors.dark.textMuted,
-    borderRadius: 20,
-  },
-  categoryImageText: {
-    color: Colors.dark.background,
-    textAlign: "center",
-    lineHeight: 40,
-  },
-  categoryName: {
-    color: Colors.dark.text,
-    fontSize: 16,
-    fontWeight: "bold",
-    paddingRight: 10,
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    categoryContainer: {
+      backgroundColor: colors.surface,
+      padding: 8,
+      borderRadius: 32,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      minHeight: 60,
+    },
+    categoryImage: {
+      width: 40,
+      height: 40,
+      backgroundColor: colors.textMuted,
+      borderRadius: 20,
+    },
+    categoryImageText: {
+      color: colors.background,
+      textAlign: "center",
+      lineHeight: 40,
+    },
+    categoryName: {
+      color: colors.text,
+      fontSize: 16,
+      fontWeight: "bold",
+      paddingRight: 10,
+    },
+  });

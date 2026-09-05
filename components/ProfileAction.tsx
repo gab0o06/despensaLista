@@ -2,6 +2,7 @@ import { Entypo, Feather } from "@expo/vector-icons";
 import { View, Text, StyleSheet, TouchableOpacity, Switch } from "react-native";
 import { Colors } from "../constants/theme";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface ProfileActionProps {
   icon?: "user" | "mail" | "bell" | "moon" | "userFont" | "bullhorn";
@@ -20,6 +21,8 @@ export const ProfileAction = ({
   onValueChange,
   onPress,
 }: ProfileActionProps) => {
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
   return (
     <TouchableOpacity
       style={styles.mainActionContainer}
@@ -51,8 +54,8 @@ export const ProfileAction = ({
           <Switch
             value={value}
             onValueChange={onValueChange}
-            trackColor={{ false: Colors.dark.text, true: Colors.dark.text }}
-            thumbColor={value ? Colors.dark.secondary : Colors.dark.text}
+            trackColor={{ false: colors.text, true: colors.text }}
+            thumbColor={value ? colors.secondary : colors.text}
           />
         ) : (
           <Entypo name="chevron-right" size={40} color="white" />
@@ -62,46 +65,47 @@ export const ProfileAction = ({
   );
 };
 
-const styles = StyleSheet.create({
-  mainCategoryText: {
-    fontSize: 20,
-    color: "white",
-  },
-  mainActionContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 8,
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  mainActionInfoContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 15,
-  },
-  mainActionImgContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "#535353",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  mainActionName: {
-    fontSize: 24,
-    color: "white",
-    fontFamily: "Sen_700Bold",
-  },
-  logOutActionImgContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: Colors.dark.surface,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    mainCategoryText: {
+      fontSize: 20,
+      color: "white",
+    },
+    mainActionContainer: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      backgroundColor: colors.surface,
+      borderRadius: 8,
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+    },
+    mainActionInfoContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      gap: 15,
+    },
+    mainActionImgContainer: {
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      backgroundColor: "#535353",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    mainActionName: {
+      fontSize: 24,
+      color: "white",
+      fontFamily: "Sen_700Bold",
+    },
+    logOutActionImgContainer: {
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      backgroundColor: colors.surface,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });

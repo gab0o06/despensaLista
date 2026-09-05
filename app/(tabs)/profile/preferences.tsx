@@ -3,11 +3,14 @@ import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { ProfileAction } from "../../../components/ProfileAction";
 import { useState } from "react";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 export default function Preferences() {
   const [newOrders, setNewOrders] = useState(false);
   const [inactiveShops, setInactiveShops] = useState(false);
   const [updates, setUpdates] = useState(false);
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   return (
     <View style={styles.body}>
@@ -44,15 +47,16 @@ export default function Preferences() {
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-  },
-  mainItemsListContainer: {
-    marginTop: 10,
-    marginBottom: 30,
-    gap: 12,
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    mainItemsListContainer: {
+      marginTop: 10,
+      marginBottom: 30,
+      gap: 12,
+    },
+  });

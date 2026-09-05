@@ -28,6 +28,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { useFocusEffect } from "expo-router";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface Product {
   id: string;
@@ -43,6 +44,8 @@ interface Product {
   shopId: string;
   shopName: string | "";
   shopCategory: string | "";
+  agotado: boolean;
+  diaCompra?: string | null;
 }
 
 export default function HomeScreen() {
@@ -52,6 +55,9 @@ export default function HomeScreen() {
   const [username, setUsername] = useState<string>(
     auth.currentUser?.displayName || "User",
   );
+
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const fetchInfoProductsToday = async () => {
     setLoading(true);
@@ -73,28 +79,8 @@ export default function HomeScreen() {
       const userData = userSnapshot.data();
       setUsername(userData?.username || "User");
 
-      const time = new Date();
-      const diaMes = time.getDate();
-      const mes = time.getMonth();
-      const hoy = time.getDay();
-      const dias = ["D", "L", "M", "Mi", "J", "V", "S"];
-
-      const recurrenciaValida = ["Diaria", dias[hoy]];
-
-      if (diaMes === 1) {
-        recurrenciaValida.push("Mensual");
-      }
-
-      if (diaMes === 1 && mes === 0) {
-        recurrenciaValida.push("Anual");
-      }
-
       const productsRef = collection(db, "products");
-      const q = query(
-        productsRef,
-        where("members", "array-contains", userId),
-        where("recurrence", "in", recurrenciaValida),
-      );
+      const q = query(productsRef, where("members", "array-contains", userId));
 
       const querySnapshot = await getDocs(q);
       const products: Product[] = querySnapshot.docs.map((doc) => ({
@@ -102,8 +88,25 @@ export default function HomeScreen() {
         ...doc.data(),
       })) as Product[];
 
+      const time = new Date();
+      const diaMes = time.getDate();
+      const mes = time.getMonth();
+      const hoy = time.getDay();
+      const dias = ["D", "L", "M", "Mi", "J", "V", "S"];
+
+      const esProductoHoy = (product: Product) => {
+        if (!product) return false;
+        const recurrence = product.recurrence;
+        if (recurrence === "Diaria") return true;
+        if (recurrence === "Semanal") return product.diaCompra === dias[hoy];
+        if (recurrence === "Mensual") return diaMes === 1;
+        if (recurrence === "Anual") return diaMes === 1 && mes === 0;
+        return false;
+      };
+      const productosHoy = products.filter((product) => esProductoHoy(product));
+
       const productsWithShops = await Promise.all(
-        products.map(async (product): Promise<Product> => {
+        productosHoy.map(async (product): Promise<Product> => {
           try {
             const shopRef = doc(db, "shops", product.shopId);
             const shopSnapshot = await getDoc(shopRef);
@@ -208,7 +211,7 @@ export default function HomeScreen() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={Colors.dark.secondary} />
+          <ActivityIndicator size="large" color={colors.secondary} />
         </View>
       </View>
     );
@@ -237,8 +240,8 @@ export default function HomeScreen() {
       >
         <View style={[{ gap: 20 }, styles.paddingScreen]}>
           <Text style={styles.title}>
-            <Text style={{ color: Colors.dark.accent }}>Hi</Text> {username},
-            Good Afternoon!
+            <Text style={{ color: colors.accent }}>Hi</Text> {username}, Good
+            Afternoon!
           </Text>
           <SearchInput placeholder="Search Shop and Activities" />
         </View>
@@ -312,43 +315,44 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-  },
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    paddingTop: 32,
-    backgroundColor: Colors.dark.background,
-  },
-  paddingScreen: {
-    paddingHorizontal: 20,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10,
-  },
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    container: {
+      flex: 1,
+      flexDirection: "column",
+      paddingTop: 32,
+      backgroundColor: colors.background,
+    },
+    paddingScreen: {
+      paddingHorizontal: 20,
+    },
+    header: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 10,
+    },
 
-  content: {
-    flexDirection: "column",
-    gap: 20,
-    marginTop: 32,
-    paddingBottom: 150,
-  },
-  title: {
-    fontFamily: "Sen_400Regular",
-    fontSize: 20,
-    color: Colors.dark.text,
-  },
+    content: {
+      flexDirection: "column",
+      gap: 20,
+      marginTop: 32,
+      paddingBottom: 150,
+    },
+    title: {
+      fontFamily: "Sen_400Regular",
+      fontSize: 20,
+      color: colors.text,
+    },
 
-  shop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-});
+    shop: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 16,
+    },
+  });

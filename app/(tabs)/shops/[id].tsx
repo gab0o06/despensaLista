@@ -31,6 +31,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "../../../utils/firebase";
 import { getTime, isLengthValid } from "../../../utils/validators";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 interface Shop {
   members: string[];
@@ -61,6 +62,8 @@ export default function ShopTemplateInfo() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[] | null>([]);
   const shopId = useLocalSearchParams<{ id: string }>().id;
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   useFocusEffect(
     useCallback(() => {
@@ -112,7 +115,7 @@ export default function ShopTemplateInfo() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={Colors.dark.secondary} />
+          <ActivityIndicator size="large" color={colors.secondary} />
         </View>
       </View>
     );
@@ -190,107 +193,108 @@ export default function ShopTemplateInfo() {
         asChild
       >
         <TouchableOpacity style={styles.addShopBtn} activeOpacity={0.8}>
-          <Entypo name="plus" size={24} color={Colors.dark.bar} />
+          <Entypo name="plus" size={24} color={colors.bar} />
         </TouchableOpacity>
       </Link>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 20,
-  },
-  headerShopInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 15,
-  },
-  imageContainer: {
-    width: 90,
-    height: 90,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.dark.accent,
-  },
-  shopName: {
-    fontSize: 34,
-    fontWeight: "bold",
-    color: "white",
-  },
-  descShop: {
-    fontSize: 16,
-    color: "#D9D9D9",
-  },
-  actionDots: {
-    alignItems: "center",
-    width: 30,
-    height: 30,
-    borderRadius: 8,
-    justifyContent: "flex-end",
-    backgroundColor: Colors.dark.secondary,
-  },
-  categoriesContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-  },
-  categoryItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 24,
-    borderWidth: 2,
-    borderColor: Colors.dark.search,
-  },
-  categoryText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  activeCategoryItem: {
-    color: Colors.dark.success,
-    backgroundColor: "#D9D9D922",
-    borderColor: Colors.dark.success,
-  },
-  activeCategoryText: {
-    color: Colors.dark.success,
-  },
-  moreFunctionsContainer: {
-    position: "absolute",
-    top: 40,
-    right: 0,
-    borderRadius: 8,
-    zIndex: 10,
-  },
-  addShopBtn: {
-    position: "absolute",
-    bottom: 80,
-    right: 20,
-    zIndex: 10,
-    backgroundColor: Colors.dark.secondary,
-    borderRadius: 16,
-    width: 60,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  mainCategoryText: {
-    fontSize: 20,
-    color: "white",
-    marginTop: 10,
-  },
-  container: {
-    flexGrow: 1,
-    paddingBottom: 150,
-    backgroundColor: Colors.dark.background,
-    justifyContent: "center",
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    headerContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginVertical: 20,
+    },
+    headerShopInfo: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 15,
+    },
+    imageContainer: {
+      width: 90,
+      height: 90,
+      borderRadius: 16,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: colors.accent,
+    },
+    shopName: {
+      fontSize: 34,
+      fontWeight: "bold",
+      color: "white",
+    },
+    descShop: {
+      fontSize: 16,
+      color: "#D9D9D9",
+    },
+    actionDots: {
+      alignItems: "center",
+      width: 30,
+      height: 30,
+      borderRadius: 8,
+      justifyContent: "flex-end",
+      backgroundColor: colors.secondary,
+    },
+    categoriesContainer: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 10,
+    },
+    categoryItem: {
+      paddingVertical: 10,
+      paddingHorizontal: 16,
+      borderRadius: 24,
+      borderWidth: 2,
+      borderColor: colors.search,
+    },
+    categoryText: {
+      color: "white",
+      fontSize: 16,
+      fontWeight: "700",
+    },
+    activeCategoryItem: {
+      color: colors.success,
+      backgroundColor: "#D9D9D922",
+      borderColor: colors.success,
+    },
+    activeCategoryText: {
+      color: colors.success,
+    },
+    moreFunctionsContainer: {
+      position: "absolute",
+      top: 40,
+      right: 0,
+      borderRadius: 8,
+      zIndex: 10,
+    },
+    addShopBtn: {
+      position: "absolute",
+      bottom: 80,
+      right: 20,
+      zIndex: 10,
+      backgroundColor: colors.secondary,
+      borderRadius: 16,
+      width: 60,
+      height: 60,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    mainCategoryText: {
+      fontSize: 20,
+      color: "white",
+      marginTop: 10,
+    },
+    container: {
+      flexGrow: 1,
+      paddingBottom: 150,
+      backgroundColor: colors.background,
+      justifyContent: "center",
+    },
+  });

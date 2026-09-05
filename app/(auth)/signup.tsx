@@ -18,6 +18,7 @@ import { Button } from "../../components/Btn";
 import { auth, db } from "../../utils/firebase";
 import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function SingUpScreen() {
   const [username, setUsername] = useState("");
@@ -25,6 +26,8 @@ export default function SingUpScreen() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const handleSignup = async () => {
     if (
@@ -75,6 +78,8 @@ export default function SingUpScreen() {
           "ERROR",
           "An error occurred while creating your profile. Please try again.",
         );
+        console.error("Error creating user profile:", profileErr);
+
         return;
       }
     } catch (err: any) {
@@ -155,72 +160,73 @@ export default function SingUpScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-    justifyContent: "center",
-  },
-  backBtn: {
-    width: 45,
-    height: 45,
-    borderRadius: 20,
-    backgroundColor: Colors.dark.text,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    top: 20,
-    left: 20,
-    zIndex: 1,
-  },
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    container: {
+      flexGrow: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+      justifyContent: "center",
+    },
+    backBtn: {
+      width: 45,
+      height: 45,
+      borderRadius: 20,
+      backgroundColor: colors.text,
+      justifyContent: "center",
+      alignItems: "center",
+      position: "absolute",
+      top: 20,
+      left: 20,
+      zIndex: 1,
+    },
 
-  formContainer: {
-    flex: 1,
-    gap: 20,
-    marginBottom: 150,
-  },
+    formContainer: {
+      flex: 1,
+      gap: 20,
+      marginBottom: 150,
+    },
 
-  footerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  rememberMe: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 4,
-    backgroundColor: Colors.dark.textMuted,
-    marginRight: 8,
-    borderColor: Colors.dark.text,
-    borderWidth: 1,
-  },
-  remeberMeText: {
-    color: Colors.dark.textMuted,
-  },
-  forgotText: {
-    color: Colors.dark.secondary,
-    fontSize: 14,
-    fontFamily: "Sen_400Regular",
-  },
+    footerContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    rememberMe: {
+      flexDirection: "row",
+      gap: 8,
+    },
+    checkbox: {
+      width: 20,
+      height: 20,
+      borderRadius: 4,
+      backgroundColor: colors.textMuted,
+      marginRight: 8,
+      borderColor: colors.text,
+      borderWidth: 1,
+    },
+    remeberMeText: {
+      color: colors.textMuted,
+    },
+    forgotText: {
+      color: colors.secondary,
+      fontSize: 14,
+      fontFamily: "Sen_400Regular",
+    },
 
-  footer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 40,
-  },
-  footerText: {
-    color: Colors.dark.textMuted,
-    fontSize: 16,
-    fontFamily: "Sen_400Regular",
-  },
-  signupText: {
-    color: Colors.dark.accent,
-    fontSize: 16,
-    fontFamily: "Sen_700Bold",
-  },
-});
+    footer: {
+      flexDirection: "row",
+      justifyContent: "center",
+      marginBottom: 40,
+    },
+    footerText: {
+      color: colors.textMuted,
+      fontSize: 16,
+      fontFamily: "Sen_400Regular",
+    },
+    signupText: {
+      color: colors.accent,
+      fontSize: 16,
+      fontFamily: "Sen_700Bold",
+    },
+  });

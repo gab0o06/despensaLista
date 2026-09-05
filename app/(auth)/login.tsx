@@ -18,12 +18,15 @@ import { useState } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebase";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function LoginScreen() {
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const handleLogin = async () => {
     if (email.trim() === "" || password.trim() === "" || !email || !password) {
@@ -116,63 +119,64 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-    justifyContent: "center",
-  },
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    container: {
+      flexGrow: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+      justifyContent: "center",
+    },
 
-  formContainer: {
-    flex: 1,
-    gap: 20,
-    marginBottom: 30,
-  },
+    formContainer: {
+      flex: 1,
+      gap: 20,
+      marginBottom: 30,
+    },
 
-  footerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  rememberMe: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 4,
-    backgroundColor: Colors.dark.textMuted,
-    marginRight: 8,
-    borderColor: Colors.dark.text,
-    borderWidth: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  remeberMeText: {
-    color: Colors.dark.textMuted,
-  },
-  forgotText: {
-    color: Colors.dark.secondary,
-    fontSize: 14,
-    fontFamily: "Sen_400Regular",
-  },
+    footerContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    rememberMe: {
+      flexDirection: "row",
+      gap: 8,
+    },
+    checkbox: {
+      width: 20,
+      height: 20,
+      borderRadius: 4,
+      backgroundColor: colors.textMuted,
+      marginRight: 8,
+      borderColor: colors.text,
+      borderWidth: 1,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    remeberMeText: {
+      color: colors.textMuted,
+    },
+    forgotText: {
+      color: colors.secondary,
+      fontSize: 14,
+      fontFamily: "Sen_400Regular",
+    },
 
-  footer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 40,
-  },
-  footerText: {
-    color: Colors.dark.textMuted,
-    fontSize: 16,
-    fontFamily: "Sen_400Regular",
-  },
-  signupText: {
-    color: Colors.dark.accent,
-    fontSize: 16,
-    fontFamily: "Sen_700Bold",
-  },
-});
+    footer: {
+      flexDirection: "row",
+      justifyContent: "center",
+      marginBottom: 40,
+    },
+    footerText: {
+      color: colors.textMuted,
+      fontSize: 16,
+      fontFamily: "Sen_400Regular",
+    },
+    signupText: {
+      color: colors.accent,
+      fontSize: 16,
+      fontFamily: "Sen_700Bold",
+    },
+  });

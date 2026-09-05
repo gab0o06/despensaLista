@@ -3,8 +3,11 @@ import { View, StyleSheet } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import * as Haptics from "expo-haptics";
 import { Colors } from "../../constants/theme";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function TabLayout() {
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
   return (
     <Tabs
       screenOptions={{
@@ -74,42 +77,43 @@ export default function TabLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  tabBar: {
-    backgroundColor: Colors.dark.bar,
-    height: 70,
-    position: "absolute",
-    bottom: 0,
-    borderTopWidth: 0,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "flex-end",
-  },
-  activeDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#FFFFFF",
-    marginTop: 2,
-  },
-  iconContainer: {
-    width: 60,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  floatingButton: {
-    top: -30,
-    justifyContent: "center",
-    alignItems: "center",
-    width: 65,
-    height: 65,
-    borderRadius: 30,
-    backgroundColor: Colors.dark.secondary,
-    borderWidth: 10,
-    borderColor: Colors.dark.bar,
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    tabBar: {
+      backgroundColor: colors.bar,
+      height: 70,
+      position: "absolute",
+      bottom: 0,
+      borderTopWidth: 0,
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "flex-end",
+    },
+    activeDot: {
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+      backgroundColor: "#FFFFFF",
+      marginTop: 2,
+    },
+    iconContainer: {
+      width: 60,
+      height: 60,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    floatingButton: {
+      top: -30,
+      justifyContent: "center",
+      alignItems: "center",
+      width: 65,
+      height: 65,
+      borderRadius: 30,
+      backgroundColor: colors.secondary,
+      borderWidth: 10,
+      borderColor: colors.bar,
+    },
+  });

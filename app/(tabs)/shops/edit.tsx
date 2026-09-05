@@ -17,6 +17,7 @@ import { FormText } from "../../../components/FormText";
 import { Button } from "../../../components/Btn";
 import { auth, db } from "../../../utils/firebase";
 import { categories } from "../../../constants/shopCategories";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 export default function EditShop() {
   const [nameShop, setNameShop] = useState("");
@@ -24,6 +25,8 @@ export default function EditShop() {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const id = useLocalSearchParams<{ id: string }>().id;
 
@@ -102,7 +105,7 @@ export default function EditShop() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={Colors.dark.secondary} />
+          <ActivityIndicator size="large" color={colors.secondary} />
         </View>
       </View>
     );
@@ -139,7 +142,7 @@ export default function EditShop() {
                 style={[
                   styles.categoryItem,
                   category === item.name && {
-                    backgroundColor: Colors.dark.secondary,
+                    backgroundColor: colors.secondary,
                   },
                 ]}
               >
@@ -164,7 +167,7 @@ export default function EditShop() {
         />
         <Button
           title={loading ? "Updating..." : "Update Shop"}
-          backgroundColor={Colors.dark.secondary}
+          backgroundColor={colors.secondary}
           onPress={handleUpdateShop}
           disabled={loading}
         />
@@ -173,51 +176,52 @@ export default function EditShop() {
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-  },
-  formContainer: {
-    gap: 16,
-    marginBottom: 120,
-  },
-  inputContainer: {
-    gap: 16,
-  },
-  inputLabel: {
-    color: Colors.dark.text,
-    fontFamily: "Sen_400Regular",
-    fontSize: 16,
-  },
-  inputTextContainer: {
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    alignItems: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-    gap: 10,
-  },
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    formContainer: {
+      gap: 16,
+      marginBottom: 120,
+    },
+    inputContainer: {
+      gap: 16,
+    },
+    inputLabel: {
+      color: colors.text,
+      fontFamily: "Sen_400Regular",
+      fontSize: 16,
+    },
+    inputTextContainer: {
+      paddingVertical: 12,
+      paddingHorizontal: 8,
+      borderRadius: 8,
+      alignItems: "center",
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "flex-start",
+      gap: 10,
+    },
 
-  categoryItem: {
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: Colors.dark.secondary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  categoryText: {
-    color: "#888",
-    fontFamily: "Sen_400Regular",
-    fontSize: 14,
-  },
-  categoryTextSelected: {
-    color: Colors.dark.text,
-    fontFamily: "Sen_700Bold",
-  },
-});
+    categoryItem: {
+      paddingVertical: 8,
+      paddingHorizontal: 8,
+      borderRadius: 20,
+      borderWidth: 1,
+      borderColor: colors.secondary,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    categoryText: {
+      color: "#888",
+      fontFamily: "Sen_400Regular",
+      fontSize: 14,
+    },
+    categoryTextSelected: {
+      color: colors.text,
+      fontFamily: "Sen_700Bold",
+    },
+  });

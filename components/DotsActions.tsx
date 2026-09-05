@@ -5,6 +5,7 @@ import { Entypo } from "@expo/vector-icons";
 
 import { Colors } from "../constants/theme";
 import { useState } from "react";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface DotsActionsProps {
   route: ReturnType<typeof useRouter>;
@@ -18,6 +19,8 @@ export const DotsActions = ({
   pathDelete,
 }: DotsActionsProps) => {
   const [activeMoreFunctions, setActiveMoreFunctions] = useState(false);
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   return (
     <>
@@ -33,7 +36,7 @@ export const DotsActions = ({
           <TouchableOpacity
             style={{
               padding: 10,
-              backgroundColor: Colors.dark.accent,
+              backgroundColor: colors.accent,
               borderRadius: 8,
               marginBottom: 10,
             }}
@@ -43,7 +46,7 @@ export const DotsActions = ({
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              backgroundColor: Colors.dark.error,
+              backgroundColor: colors.error,
               borderRadius: 8,
               padding: 10,
             }}
@@ -57,22 +60,23 @@ export const DotsActions = ({
   );
 };
 
-const styles = StyleSheet.create({
-  actionDots: {
-    position: "absolute",
-    right: 0,
-    alignItems: "center",
-    width: 30,
-    height: 30,
-    borderRadius: 8,
-    justifyContent: "flex-end",
-    backgroundColor: Colors.dark.secondary,
-  },
-  moreFunctionsContainer: {
-    position: "absolute",
-    top: 40,
-    right: 0,
-    borderRadius: 8,
-    zIndex: 10,
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    actionDots: {
+      position: "absolute",
+      right: 0,
+      alignItems: "center",
+      width: 30,
+      height: 30,
+      borderRadius: 8,
+      justifyContent: "flex-end",
+      backgroundColor: colors.secondary,
+    },
+    moreFunctionsContainer: {
+      position: "absolute",
+      top: 40,
+      right: 0,
+      borderRadius: 8,
+      zIndex: 10,
+    },
+  });

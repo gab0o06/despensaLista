@@ -8,6 +8,7 @@ import {
 import { Colors } from "../constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface FormTextProps {
   type?: "text" | "desc" | "password" | "number" | "price";
@@ -27,6 +28,8 @@ export const FormText = ({
   onChangeText,
 }: FormTextProps) => {
   const [active, setActive] = useState(false);
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.inputLabel}>{label}</Text>
@@ -50,7 +53,7 @@ export const FormText = ({
           ]}
           multiline={type === "desc"}
           textAlignVertical={type === "desc" ? "top" : "center"}
-          placeholderTextColor={Colors.dark.textMuted}
+          placeholderTextColor={colors.textMuted}
         />
         {type === "password" ? (
           <TouchableOpacity
@@ -62,7 +65,7 @@ export const FormText = ({
             <Ionicons
               name={active ? "eye" : "eye-off"}
               size={24}
-              color={Colors.dark.textMuted}
+              color={colors.textMuted}
             />
           </TouchableOpacity>
         ) : null}
@@ -71,31 +74,32 @@ export const FormText = ({
   );
 };
 
-const styles = StyleSheet.create({
-  inputContainer: {
-    gap: 16,
-  },
-  inputLabel: {
-    color: Colors.dark.text,
-    fontFamily: "Sen_400Regular",
-    fontSize: 16,
-  },
-  inputTextContainer: {
-    backgroundColor: Colors.dark.search,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  inputText: {
-    flex: 1,
-    color: Colors.dark.text,
-    fontFamily: "Sen_400Regular",
-    fontSize: 16,
-  },
-  descriptionChange: {
-    height: 120,
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    inputContainer: {
+      gap: 16,
+    },
+    inputLabel: {
+      color: colors.text,
+      fontFamily: "Sen_400Regular",
+      fontSize: 16,
+    },
+    inputTextContainer: {
+      backgroundColor: colors.search,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderRadius: 8,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    inputText: {
+      flex: 1,
+      color: colors.text,
+      fontFamily: "Sen_400Regular",
+      fontSize: 16,
+    },
+    descriptionChange: {
+      height: 120,
+    },
+  });

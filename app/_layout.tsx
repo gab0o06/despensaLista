@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { ThemeProvider } from "../contexts/ThemeContext";
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_WEB_ID,
@@ -59,11 +60,13 @@ export default function RootLayout() {
   if (!loaded || initializing) return null;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
-      <Stack>
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </SafeAreaView>
+    <ThemeProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
+        <Stack>
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </SafeAreaView>
+    </ThemeProvider>
   );
 }

@@ -11,6 +11,7 @@ import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { auth, db } from "../utils/firebase";
 import { Colors } from "../constants/theme";
 import { doc, setDoc } from "firebase/firestore";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface GoogleBtnProps {
   text?: string;
@@ -18,6 +19,9 @@ interface GoogleBtnProps {
 }
 
 export const GoogleBtn = ({ text }: GoogleBtnProps) => {
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
+
   const handleGoogleSignIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
@@ -72,25 +76,26 @@ export const GoogleBtn = ({ text }: GoogleBtnProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  googleBtn: {
-    backgroundColor: "#FFFFFF12",
-    alignSelf: "flex-start",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-  },
-  googleBtnText: {
-    color: Colors.dark.text,
-    fontFamily: "Sen_700Bold",
-    fontSize: 16,
-  },
-  googleBtnIcon: {
-    width: 40,
-    height: 40,
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    googleBtn: {
+      backgroundColor: "#FFFFFF12",
+      alignSelf: "flex-start",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      gap: 12,
+      paddingVertical: 10,
+      paddingHorizontal: 16,
+      borderRadius: 8,
+    },
+    googleBtnText: {
+      color: colors.text,
+      fontFamily: "Sen_700Bold",
+      fontSize: 16,
+    },
+    googleBtnIcon: {
+      width: 40,
+      height: 40,
+    },
+  });

@@ -3,6 +3,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { Colors } from "../constants/theme";
 import { useRouter } from "expo-router";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface ShopProps {
   id: string;
@@ -30,7 +31,9 @@ export const Shop = ({
   lastActivity,
   category,
 }: ShopProps) => {
+  const { colors } = useTheme();
   const router = useRouter();
+  const styles = getStyles(colors);
   const iconName = categoryIcons[category] || "storefront";
 
   const formatDate = (date: Date) => {
@@ -72,42 +75,43 @@ export const Shop = ({
   );
 };
 
-const styles = StyleSheet.create({
-  shopContainer: {
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 10,
-    padding: 20,
-    marginBottom: 20,
-    flexDirection: "row",
-    gap: 10,
-  },
-  imageContainer: {
-    backgroundColor: Colors.dark.accent,
-    borderRadius: 10,
-    width: 80,
-    height: 80,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    shopContainer: {
+      backgroundColor: colors.surface,
+      borderRadius: 10,
+      padding: 20,
+      marginBottom: 20,
+      flexDirection: "row",
+      gap: 10,
+    },
+    imageContainer: {
+      backgroundColor: colors.accent,
+      borderRadius: 10,
+      width: 80,
+      height: 80,
+      justifyContent: "center",
+      alignItems: "center",
+    },
 
-  infoContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  txtContainer: {
-    flex: 1,
-    justifyContent: "center",
-    gap: 2,
-  },
-  shopName: {
-    fontSize: 24,
-    fontFamily: "Sen_700Bold",
-    color: "white",
-  },
-  shopDescription: {
-    fontSize: 14,
-    fontFamily: "Sen_400Regular",
-    color: Colors.dark.textMuted,
-  },
-});
+    infoContainer: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    txtContainer: {
+      flex: 1,
+      justifyContent: "center",
+      gap: 2,
+    },
+    shopName: {
+      fontSize: 24,
+      fontFamily: "Sen_700Bold",
+      color: "white",
+    },
+    shopDescription: {
+      fontSize: 14,
+      fontFamily: "Sen_400Regular",
+      color: colors.textMuted,
+    },
+  });

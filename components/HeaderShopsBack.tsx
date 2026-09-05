@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Colors } from "../constants/theme";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface HeaderShopsBackProps {
   title?: string;
@@ -10,7 +11,9 @@ interface HeaderShopsBackProps {
 }
 
 export const HeaderShopsBack = ({ title, subtitle }: HeaderShopsBackProps) => {
+  const { colors } = useTheme();
   const router = useRouter();
+  const styles = getStyles(colors);
   return (
     <View>
       <View style={styles.headerContainer}>
@@ -36,37 +39,38 @@ export const HeaderShopsBack = ({ title, subtitle }: HeaderShopsBackProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginVertical: 40,
-    marginBottom: 20,
-  },
-  backBtn: {
-    width: 50,
-    height: 50,
-    borderRadius: 30,
-    backgroundColor: Colors.dark.text,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  txtContainer: {
-    marginBottom: 20,
-    flexDirection: "column",
-    alignContent: "center",
-  },
-  title: {
-    fontSize: 40,
-    fontFamily: "Sen_700Bold",
-    color: Colors.dark.text,
-    textAlign: "center",
-  },
-  subtitle: {
-    fontSize: 20,
-    fontFamily: "Sen_400Regular",
-    color: Colors.dark.textMuted,
-    textAlign: "center",
-  },
-});
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    headerContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginVertical: 40,
+      marginBottom: 20,
+    },
+    backBtn: {
+      width: 50,
+      height: 50,
+      borderRadius: 30,
+      backgroundColor: colors.text,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    txtContainer: {
+      marginBottom: 20,
+      flexDirection: "column",
+      alignContent: "center",
+    },
+    title: {
+      fontSize: 40,
+      fontFamily: "Sen_700Bold",
+      color: colors.text,
+      textAlign: "center",
+    },
+    subtitle: {
+      fontSize: 20,
+      fontFamily: "Sen_400Regular",
+      color: colors.textMuted,
+      textAlign: "center",
+    },
+  });

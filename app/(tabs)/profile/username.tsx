@@ -9,11 +9,14 @@ import { useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../utils/firebase";
 import { useRouter } from "expo-router";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 export default function UsernameChange() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const isValidUsername = (username: string) => {
     const usernameRegex = /^[a-zA-Z0-9]{2,15}$/;
@@ -68,11 +71,11 @@ export default function UsernameChange() {
           <Ionicons
             name="information-circle"
             size={30}
-            color={Colors.dark.textMuted}
+            color={colors.textMuted}
           />
           <Text
             style={{
-              color: Colors.dark.textMuted,
+              color: colors.textMuted,
               fontFamily: "Sen_400Regular",
               flex: 1,
               flexWrap: "wrap",
@@ -86,29 +89,30 @@ export default function UsernameChange() {
       <Button
         title={loading ? "GUARDANDO..." : "GUARDAR"}
         onPress={handleUsernameChange}
-        backgroundColor={Colors.dark.secondary}
+        backgroundColor={colors.secondary}
         disabled={loading}
       />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 20,
-  },
-  mainFormContainer: {
-    marginTop: 10,
-    marginBottom: 30,
-    gap: 12,
-  },
+const getStyles = (colors: typeof Colors.dark) =>
+  StyleSheet.create({
+    body: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    mainFormContainer: {
+      marginTop: 10,
+      marginBottom: 30,
+      gap: 12,
+    },
 
-  mainInfoFormContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
-    gap: 10,
-  },
-});
+    mainInfoFormContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginVertical: 10,
+      gap: 10,
+    },
+  });
