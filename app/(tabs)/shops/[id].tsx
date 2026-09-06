@@ -115,7 +115,7 @@ export default function ShopTemplateInfo() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={colors.secondary} />
+          <ActivityIndicator size="large" color={colors.action} />
         </View>
       </View>
     );
@@ -193,7 +193,7 @@ export default function ShopTemplateInfo() {
         asChild
       >
         <TouchableOpacity style={styles.addShopBtn} activeOpacity={0.8}>
-          <Entypo name="plus" size={24} color={colors.bar} />
+          <Entypo name="plus" size={24} color={colors.barMenu} />
         </TouchableOpacity>
       </Link>
     </View>
@@ -223,16 +223,16 @@ const getStyles = (colors: typeof Colors.dark) =>
       borderRadius: 16,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: colors.accent,
+      backgroundColor: colors.accentText,
     },
     shopName: {
       fontSize: 34,
       fontWeight: "bold",
-      color: "white",
+      color: colors.text,
     },
     descShop: {
       fontSize: 16,
-      color: "#D9D9D9",
+      color: colors.searchText,
     },
     actionDots: {
       alignItems: "center",
@@ -240,7 +240,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       height: 30,
       borderRadius: 8,
       justifyContent: "flex-end",
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.action,
     },
     categoriesContainer: {
       flexDirection: "row",
@@ -252,10 +252,10 @@ const getStyles = (colors: typeof Colors.dark) =>
       paddingHorizontal: 16,
       borderRadius: 24,
       borderWidth: 2,
-      borderColor: colors.search,
+      borderColor: colors.elementBackground,
     },
     categoryText: {
-      color: "white",
+      color: colors.text,
       fontSize: 16,
       fontWeight: "700",
     },
@@ -279,7 +279,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       bottom: 80,
       right: 20,
       zIndex: 10,
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.action,
       borderRadius: 16,
       width: 60,
       height: 60,
@@ -288,7 +288,7 @@ const getStyles = (colors: typeof Colors.dark) =>
     },
     mainCategoryText: {
       fontSize: 20,
-      color: "white",
+      color: colors.text,
       marginTop: 10,
     },
     container: {

@@ -51,7 +51,7 @@ export const ItemShop = ({
                 </View>
               </View>
               <View>
-                <Entypo name="chevron-right" size={40} color="white" />
+                <Entypo name="chevron-right" size={40} color={colors.icons} />
               </View>
             </View>
           )}
@@ -71,7 +71,7 @@ const getStyles = (colors: typeof Colors.dark) =>
     mainItemContainer: {
       flexDirection: "row",
       flexWrap: "wrap",
-      backgroundColor: colors.surface,
+      backgroundColor: colors.elementBackground,
       borderRadius: 8,
       justifyContent: "space-between",
       alignItems: "center",
@@ -94,11 +94,11 @@ const getStyles = (colors: typeof Colors.dark) =>
     },
     mainItemName: {
       fontSize: 20,
-      color: "white",
+      color: colors.text,
       fontFamily: "Sen_700Bold",
     },
     mainItemPrice: {
       fontSize: 14,
-      color: "#D9D9D9",
+      color: colors.searchText,
     },
   });

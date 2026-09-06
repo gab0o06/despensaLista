@@ -147,7 +147,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       width: 20,
       height: 20,
       borderRadius: 4,
-      backgroundColor: colors.textMuted,
+      backgroundColor: colors.searchText,
       marginRight: 8,
       borderColor: colors.text,
       borderWidth: 1,
@@ -156,10 +156,10 @@ const getStyles = (colors: typeof Colors.dark) =>
       alignItems: "center",
     },
     remeberMeText: {
-      color: colors.textMuted,
+      color: colors.searchText,
     },
     forgotText: {
-      color: colors.secondary,
+      color: colors.accentText,
       fontSize: 14,
       fontFamily: "Sen_400Regular",
     },
@@ -170,12 +170,12 @@ const getStyles = (colors: typeof Colors.dark) =>
       marginBottom: 40,
     },
     footerText: {
-      color: colors.textMuted,
+      color: colors.text,
       fontSize: 16,
       fontFamily: "Sen_400Regular",
     },
     signupText: {
-      color: colors.accent,
+      color: colors.accentText,
       fontSize: 16,
       fontFamily: "Sen_700Bold",
     },

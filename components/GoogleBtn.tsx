@@ -79,7 +79,7 @@ export const GoogleBtn = ({ text }: GoogleBtnProps) => {
 const getStyles = (colors: typeof Colors.dark) =>
   StyleSheet.create({
     googleBtn: {
-      backgroundColor: "#FFFFFF12",
+      backgroundColor: colors.googleBtnBackground,
       alignSelf: "flex-start",
       flexDirection: "row",
       alignItems: "center",

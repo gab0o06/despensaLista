@@ -103,7 +103,7 @@ export default function CreateShop() {
                 style={[
                   styles.categoryItem,
                   category === item.name && {
-                    backgroundColor: colors.secondary,
+                    backgroundColor: colors.action,
                   },
                 ]}
               >
@@ -129,7 +129,7 @@ export default function CreateShop() {
         />
         <Button
           title={loading ? "Creating..." : "Create Shop"}
-          backgroundColor={colors.secondary}
+          backgroundColor={colors.action}
           onPress={handleCreateShop}
           disabled={loading}
         />
@@ -173,17 +173,17 @@ const getStyles = (colors: typeof Colors.dark) =>
       paddingHorizontal: 8,
       borderRadius: 20,
       borderWidth: 1,
-      borderColor: colors.secondary,
+      borderColor: colors.action,
       alignItems: "center",
       justifyContent: "center",
     },
     categoryText: {
-      color: "#888",
+      color: colors.text,
       fontFamily: "Sen_400Regular",
       fontSize: 14,
     },
     categoryTextSelected: {
-      color: colors.text,
+      color: colors.alternateText,
       fontFamily: "Sen_700Bold",
     },
   });

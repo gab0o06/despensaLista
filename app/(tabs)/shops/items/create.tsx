@@ -181,7 +181,14 @@ export default function CreateItem() {
                   recurrence === option && styles.optionItemSelected,
                 ]}
               >
-                <Text style={styles.optionText}>{option}</Text>
+                <Text
+                  style={[
+                    styles.optionText,
+                    recurrence === option && styles.optionTextSelected,
+                  ]}
+                >
+                  {option}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -201,7 +208,14 @@ export default function CreateItem() {
                     dayShopping === option && styles.optionItemSelected,
                   ]}
                 >
-                  <Text style={styles.optionText}>{option}</Text>
+                  <Text
+                    style={[
+                      styles.optionText,
+                      dayShopping === option && styles.optionTextSelected,
+                    ]}
+                  >
+                    {option}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -226,7 +240,7 @@ export default function CreateItem() {
         />
         <Button
           title={loading ? "Creating..." : "CREATE ITEM"}
-          backgroundColor={colors.secondary}
+          backgroundColor={colors.action}
           onPress={handleCreateItem}
           disabled={loading}
         />
@@ -287,17 +301,20 @@ const getStyles = (colors: typeof Colors.dark) =>
       height: 42,
       borderRadius: 21,
       borderWidth: 1,
-      borderColor: colors.search,
+      borderColor: colors.elementBackground,
       alignItems: "center",
       justifyContent: "center",
     },
     optionItemSelected: {
-      backgroundColor: colors.secondary,
-      borderColor: colors.secondary,
+      backgroundColor: colors.action,
+      borderColor: colors.action,
     },
     optionText: {
       color: colors.text,
       fontFamily: "Sen_400Regular",
       fontSize: 12,
+    },
+    optionTextSelected: {
+      color: colors.alternateText,
     },
   });

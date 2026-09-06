@@ -110,7 +110,11 @@ export default function SingUpScreen() {
       >
         <Link href="/login" asChild>
           <TouchableOpacity style={styles.backBtn} activeOpacity={0.7}>
-            <Entypo name="chevron-left" size={30} color="black" />
+            <Entypo
+              name="chevron-left"
+              size={30}
+              color={colors.iconsUserColor}
+            />
           </TouchableOpacity>
         </Link>
         <HeaderUserActions
@@ -200,16 +204,16 @@ const getStyles = (colors: typeof Colors.dark) =>
       width: 20,
       height: 20,
       borderRadius: 4,
-      backgroundColor: colors.textMuted,
+      backgroundColor: colors.searchText,
       marginRight: 8,
       borderColor: colors.text,
       borderWidth: 1,
     },
     remeberMeText: {
-      color: colors.textMuted,
+      color: colors.searchText,
     },
     forgotText: {
-      color: colors.secondary,
+      color: colors.accentText,
       fontSize: 14,
       fontFamily: "Sen_400Regular",
     },
@@ -220,12 +224,12 @@ const getStyles = (colors: typeof Colors.dark) =>
       marginBottom: 40,
     },
     footerText: {
-      color: colors.textMuted,
+      color: colors.searchText,
       fontSize: 16,
       fontFamily: "Sen_400Regular",
     },
     signupText: {
-      color: colors.accent,
+      color: colors.action,
       fontSize: 16,
       fontFamily: "Sen_700Bold",
     },

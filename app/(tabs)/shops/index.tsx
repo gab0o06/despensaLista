@@ -67,7 +67,7 @@ export default function MyShops() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={colors.secondary} />
+          <ActivityIndicator size="large" color={colors.action} />
         </View>
       </View>
     );
@@ -92,7 +92,7 @@ export default function MyShops() {
       </ScrollView>
       <Link href="/(tabs)/shops/create" asChild>
         <TouchableOpacity style={styles.addShopBtn} activeOpacity={0.8}>
-          <Entypo name="plus" size={24} color={colors.bar} />
+          <Entypo name="plus" size={24} color={colors.barMenu} />
         </TouchableOpacity>
       </Link>
     </View>
@@ -111,7 +111,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       bottom: 80,
       right: 20,
       zIndex: 10,
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.action,
       borderRadius: 16,
       width: 60,
       height: 60,

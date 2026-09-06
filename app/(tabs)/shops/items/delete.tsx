@@ -62,7 +62,7 @@ export default function DeleteItem() {
         />
         <Button
           title="CANCELAR"
-          backgroundColor={colors.success}
+          backgroundColor={colors.action}
           onPress={() => {
             route.back();
           }}
@@ -99,7 +99,7 @@ const getStyles = (colors: typeof Colors.dark) =>
     subtitle: {
       fontSize: 16,
       fontFamily: "Sen_400Regular",
-      color: colors.textMuted,
+      color: colors.searchText,
       textAlign: "center",
     },
   });

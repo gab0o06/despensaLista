@@ -123,7 +123,7 @@ export default function EditItem() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={colors.secondary} />
+          <ActivityIndicator size="large" color={colors.action} />
         </View>
       </View>
     );
@@ -182,7 +182,14 @@ export default function EditItem() {
                   recurrence === option && styles.optionItemSelected,
                 ]}
               >
-                <Text style={styles.optionText}>{option}</Text>
+                <Text
+                  style={[
+                    styles.optionText,
+                    recurrence === option && styles.optionTextSelected,
+                  ]}
+                >
+                  {option}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -202,7 +209,14 @@ export default function EditItem() {
                     dayShopping === option && styles.optionItemSelected,
                   ]}
                 >
-                  <Text style={styles.optionText}>{option}</Text>
+                  <Text
+                    style={[
+                      styles.optionText,
+                      dayShopping === option && styles.optionTextSelected,
+                    ]}
+                  >
+                    {option}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -227,7 +241,7 @@ export default function EditItem() {
         />
         <Button
           title={loading ? "Updating..." : "UPDATE ITEM"}
-          backgroundColor={colors.secondary}
+          backgroundColor={colors.action}
           onPress={handleEditItem}
           disabled={loading}
         />
@@ -288,17 +302,20 @@ const getStyles = (colors: typeof Colors.dark) =>
       height: 42,
       borderRadius: 21,
       borderWidth: 1,
-      borderColor: colors.search,
+      borderColor: colors.elementBackground,
       alignItems: "center",
       justifyContent: "center",
     },
     optionItemSelected: {
-      backgroundColor: colors.secondary,
-      borderColor: colors.secondary,
+      backgroundColor: colors.action,
+      borderColor: colors.action,
     },
     optionText: {
       color: colors.text,
       fontFamily: "Sen_400Regular",
       fontSize: 12,
+    },
+    optionTextSelected: {
+      color: colors.alternateText,
     },
   });

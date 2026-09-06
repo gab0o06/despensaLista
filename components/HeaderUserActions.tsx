@@ -37,6 +37,6 @@ const getStyles = (colors: typeof Colors.dark) =>
     subtitle: {
       fontSize: 14,
       fontFamily: "Sen_400Regular",
-      color: colors.textMuted,
+      color: colors.searchText,
     },
   });

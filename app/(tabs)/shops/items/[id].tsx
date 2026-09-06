@@ -90,7 +90,7 @@ export default function ItemTemplateInfo() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={colors.secondary} />
+          <ActivityIndicator size="large" color={colors.action} />
         </View>
       </View>
     );
@@ -195,7 +195,7 @@ export default function ItemTemplateInfo() {
       </View>
       <Button
         title={updating ? "GUARDANDO..." : "GUARDAR CAMBIOS"}
-        backgroundColor={colors.secondary}
+        backgroundColor={colors.action}
         disabled={updating}
         onPress={handleSaveChanges}
       />
@@ -227,16 +227,16 @@ const getStyles = (colors: typeof Colors.dark) =>
       borderRadius: 50,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: colors.accent,
+      backgroundColor: colors.accentText,
     },
     shopName: {
       fontSize: 34,
       fontWeight: "bold",
-      color: "white",
+      color: colors.text,
     },
     descShop: {
       fontSize: 16,
-      color: "#D9D9D9",
+      color: colors.searchText,
     },
     actionDots: {
       alignItems: "center",
@@ -244,7 +244,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       height: 30,
       borderRadius: 8,
       justifyContent: "flex-end",
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.action,
     },
     moreFunctionsContainer: {
       position: "absolute",
@@ -276,8 +276,8 @@ const getStyles = (colors: typeof Colors.dark) =>
     },
     productInfoText: {
       fontSize: 16,
-      color: "#D9D9D9",
-      fontFamily: "Sen_400Regular",
+      color: colors.searchText,
+      fontFamily: "Sen_700Bold",
     },
     actionUnitsContainer: {
       flexDirection: "row",
@@ -291,13 +291,13 @@ const getStyles = (colors: typeof Colors.dark) =>
       width: 40,
       height: 40,
       borderRadius: 8,
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.action,
       alignItems: "center",
       justifyContent: "center",
     },
     actionUnitText: {
       fontSize: 20,
-      color: "white",
+      color: colors.text,
       fontFamily: "Sen_400Regular",
     },
   });

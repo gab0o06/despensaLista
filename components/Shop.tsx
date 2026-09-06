@@ -69,7 +69,7 @@ export const Shop = ({
         </Text>
       </View>
       <View style={styles.infoContainer}>
-        <Entypo name="chevron-right" size={40} color="white" />
+        <Entypo name="chevron-right" size={40} color={colors.text} />
       </View>
     </TouchableOpacity>
   );
@@ -78,7 +78,7 @@ export const Shop = ({
 const getStyles = (colors: typeof Colors.dark) =>
   StyleSheet.create({
     shopContainer: {
-      backgroundColor: colors.surface,
+      backgroundColor: colors.elementBackground,
       borderRadius: 10,
       padding: 20,
       marginBottom: 20,
@@ -86,7 +86,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       gap: 10,
     },
     imageContainer: {
-      backgroundColor: colors.accent,
+      backgroundColor: colors.accentText,
       borderRadius: 10,
       width: 80,
       height: 80,
@@ -107,11 +107,11 @@ const getStyles = (colors: typeof Colors.dark) =>
     shopName: {
       fontSize: 24,
       fontFamily: "Sen_700Bold",
-      color: "white",
+      color: colors.text,
     },
     shopDescription: {
       fontSize: 14,
       fontFamily: "Sen_400Regular",
-      color: colors.textMuted,
+      color: colors.searchText,
     },
   });

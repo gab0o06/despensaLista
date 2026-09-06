@@ -36,7 +36,7 @@ export const DotsActions = ({
           <TouchableOpacity
             style={{
               padding: 10,
-              backgroundColor: colors.accent,
+              backgroundColor: colors.accentText,
               borderRadius: 8,
               marginBottom: 10,
             }}
@@ -70,7 +70,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       height: 30,
       borderRadius: 8,
       justifyContent: "flex-end",
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.action,
     },
     moreFunctionsContainer: {
       position: "absolute",

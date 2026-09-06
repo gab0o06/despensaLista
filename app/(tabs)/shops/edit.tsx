@@ -105,7 +105,7 @@ export default function EditShop() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size="large" color={colors.secondary} />
+          <ActivityIndicator size="large" color={colors.action} />
         </View>
       </View>
     );
@@ -142,7 +142,7 @@ export default function EditShop() {
                 style={[
                   styles.categoryItem,
                   category === item.name && {
-                    backgroundColor: colors.secondary,
+                    backgroundColor: colors.action,
                   },
                 ]}
               >
@@ -167,7 +167,7 @@ export default function EditShop() {
         />
         <Button
           title={loading ? "Updating..." : "Update Shop"}
-          backgroundColor={colors.secondary}
+          backgroundColor={colors.action}
           onPress={handleUpdateShop}
           disabled={loading}
         />
@@ -211,7 +211,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       paddingHorizontal: 8,
       borderRadius: 20,
       borderWidth: 1,
-      borderColor: colors.secondary,
+      borderColor: colors.action,
       alignItems: "center",
       justifyContent: "center",
     },
@@ -221,7 +221,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       fontSize: 14,
     },
     categoryTextSelected: {
-      color: colors.text,
+      color: colors.alternateText,
       fontFamily: "Sen_700Bold",
     },
   });
