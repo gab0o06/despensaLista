@@ -259,7 +259,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       paddingHorizontal: 10,
       paddingVertical: 30,
       gap: 20,
-      borderColor: "#1D272E",
+      borderColor: colors.elementBackground,
       borderTopWidth: 2,
       borderBottomWidth: 2,
     },

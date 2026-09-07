@@ -26,7 +26,9 @@ export const ItemShop = ({
   if (!id) {
     return (
       <View style={styles.mainItemsListContainer}>
-        <Text style={{ color: "white" }}>No hay productos disponibles.</Text>
+        <Text style={{ color: colors.text }}>
+          No hay productos disponibles.
+        </Text>
       </View>
     );
   }

@@ -216,7 +216,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       justifyContent: "center",
     },
     categoryText: {
-      color: "#888",
+      color: colors.text,
       fontFamily: "Sen_400Regular",
       fontSize: 14,
     },

@@ -18,6 +18,7 @@ export const Colors = {
     success: "#7BCBB5",
 
     error: "#DA4D4D",
+    backgroundSafeArea: "#fff",
   },
   dark: {
     background: "#151C21",
@@ -37,5 +38,6 @@ export const Colors = {
     googleBtnBackground: "#FFFFFF12",
     success: "#7BCBB5",
     error: "#DA4D4D",
+    backgroundSafeArea: "#000",
   },
 };
