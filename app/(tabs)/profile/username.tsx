@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { Colors } from "../../../constants/theme";
@@ -27,7 +27,7 @@ export default function UsernameChange() {
     const user = auth.currentUser;
 
     if (!user) {
-      alert("No user is currently signed in.");
+      Alert.alert("ERROR", "No user is currently signed in.");
       return router.push("/(auth)/login");
     }
 
@@ -43,7 +43,6 @@ export default function UsernameChange() {
       await updateDoc(userRef, {
         username: username.trim(),
       });
-      //   alert("Username actualizado correctamente.");
       router.back();
     } catch (err) {
       console.error("Error updating username: ", err);

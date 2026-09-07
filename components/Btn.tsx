@@ -44,7 +44,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       marginTop: 10,
     },
     primaryButtonText: {
-      color: colors.action,
+      color: colors.text,
       fontSize: 16,
       fontFamily: "Sen_700Bold",
     },

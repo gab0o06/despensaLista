@@ -30,7 +30,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (email.trim() === "" || password.trim() === "" || !email || !password) {
-      alert("Please fill in both email and password fields.");
+      Alert.alert("ERROR", "Please fill in both email and password fields.");
       return;
     }
 

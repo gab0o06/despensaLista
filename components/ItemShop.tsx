@@ -32,31 +32,42 @@ export const ItemShop = ({
       </View>
     );
   }
+  const isOutOfStock = quantity === 0;
   return (
     <Link
       href={{ pathname: `/shops/items/[id]`, params: { id, shopName } }}
       asChild
     >
       <TouchableOpacity>
-        <View style={styles.mainItemsListContainer}>
-          {quantity && quantity > 0 && (
-            <View style={styles.mainItemContainer}>
-              <View style={styles.mainItemInfoContainer}>
-                <View style={styles.mainItemImgContainer}>
-                  <Entypo name="bowl" size={34} color="#C0C0C0" />
-                </View>
-                <View>
-                  <Text style={styles.mainItemName}>{name}</Text>
-                  <Text style={styles.mainItemPrice}>
-                    ${price?.toString()} - {quantity} unidades
-                  </Text>
-                </View>
+        <View
+          style={[
+            styles.mainItemsListContainer,
+            isOutOfStock && styles.mainItemContainerOutStock,
+          ]}
+        >
+          <View style={styles.mainItemContainer}>
+            <View style={styles.mainItemInfoContainer}>
+              <View style={styles.mainItemImgContainer}>
+                <Entypo name="bowl" size={34} color="#C0C0C0" />
               </View>
               <View>
-                <Entypo name="chevron-right" size={40} color={colors.icons} />
+                <Text style={styles.mainItemName}>{name}</Text>
+                <Text
+                  style={[
+                    styles.mainItemPrice,
+                    isOutOfStock && { color: colors.error },
+                  ]}
+                >
+                  {isOutOfStock
+                    ? "Agotado"
+                    : `$${price?.toString()} - ${quantity} unidades`}
+                </Text>
               </View>
             </View>
-          )}
+            <View>
+              <Entypo name="chevron-right" size={40} color={colors.icons} />
+            </View>
+          </View>
         </View>
       </TouchableOpacity>
     </Link>
@@ -102,5 +113,8 @@ const getStyles = (colors: typeof Colors.dark) =>
     mainItemPrice: {
       fontSize: 14,
       color: colors.searchText,
+    },
+    mainItemContainerOutStock: {
+      opacity: 0.5,
     },
   });

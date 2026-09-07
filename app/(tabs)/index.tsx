@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Colors } from "../../constants/theme";
 import { Image } from "expo-image";
@@ -136,7 +137,7 @@ export default function HomeScreen() {
       );
       setProductsToday(productsWithShops);
     } catch (err) {
-      alert("Error fetching products");
+      Alert.alert("Error", "Error fetching products");
       console.error("Error fetching products: ", err);
     } finally {
       setLoading(false);

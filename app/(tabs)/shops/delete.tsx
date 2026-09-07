@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet, Text } from "react-native";
+import { View, ScrollView, StyleSheet, Text, Alert } from "react-native";
 import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { Button } from "../../../components/Btn";
@@ -25,11 +25,15 @@ export default function DeleteShop() {
       return;
     }
     setLoading(true);
-    route.replace("/(tabs)/shops");
     try {
       await deleteDoc(doc(db, "shops", id));
+      route.replace("/(tabs)/shops");
     } catch (error) {
       console.error("Error deleting shop: ", error);
+      Alert.alert(
+        "Error",
+        "No se pudo eliminar la tienda. Intenta nuevamente.",
+      );
     } finally {
       setLoading(false);
     }

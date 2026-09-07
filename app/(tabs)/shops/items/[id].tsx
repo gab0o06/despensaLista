@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import {
@@ -107,7 +108,7 @@ export default function ItemTemplateInfo() {
       router.back();
     } catch (err) {
       console.error("Error updating product data:", err);
-      alert("Error updating product data. Please try again.");
+      Alert.alert("Error", "Error updating product data. Please try again.");
     } finally {
       setUpdating(false);
     }
