@@ -56,6 +56,7 @@ export default function HomeScreen() {
   const [username, setUsername] = useState<string>(
     auth.currentUser?.displayName || "User",
   );
+  const [searchValue, setSearchValue] = useState<string>("");
 
   const { colors } = useTheme();
   const styles = getStyles(colors);
@@ -199,6 +200,7 @@ export default function HomeScreen() {
       );
     }
   };
+
   useFocusEffect(
     useCallback(() => {
       fetchInfoProductsToday();
@@ -244,7 +246,11 @@ export default function HomeScreen() {
             <Text style={{ color: colors.accentText }}>Hi</Text> {username},
             Good Afternoon!
           </Text>
-          <SearchInput placeholder="Search Shop and Activities" />
+          <SearchInput
+            placeholder="Search Shop and Activities"
+            value={searchValue}
+            onChangeText={(text) => setSearchValue(text)}
+          />
         </View>
         <View>
           <View style={[styles.shop, styles.paddingScreen]}>
@@ -295,6 +301,14 @@ export default function HomeScreen() {
               })
 
               .map((product) => {
+                if (
+                  searchValue &&
+                  !product.name
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase())
+                ) {
+                  return null;
+                }
                 const isChecked = fueCompradoHoy(product.compradoEn);
                 return (
                   <TodayActivity

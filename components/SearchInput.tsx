@@ -5,9 +5,15 @@ import { useTheme } from "../contexts/ThemeContext";
 
 interface SearchInputProps {
   placeholder?: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
 }
 
-export const SearchInput = ({ placeholder }: SearchInputProps) => {
+export const SearchInput = ({
+  placeholder,
+  value,
+  onChangeText,
+}: SearchInputProps) => {
   const { colors } = useTheme();
   const styles = getStyles(colors);
   return (
@@ -17,6 +23,8 @@ export const SearchInput = ({ placeholder }: SearchInputProps) => {
         placeholder={placeholder}
         style={styles.searchInput}
         placeholderTextColor={colors.searchText}
+        value={value}
+        onChangeText={onChangeText}
       />
     </View>
   );

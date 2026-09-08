@@ -4,16 +4,18 @@ import Feather from "@expo/vector-icons/Feather";
 import * as Haptics from "expo-haptics";
 import { Colors } from "../../constants/theme";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   const { colors } = useTheme();
   const styles = getStyles(colors);
+  const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarLabelVisibilityMode: "unlabeled",
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: [styles.tabBar, { paddingBottom: insets.bottom }],
         animation: "fade",
         tabBarHideOnKeyboard: true,
       }}
