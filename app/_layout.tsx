@@ -3,11 +3,12 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { Sen_400Regular, Sen_700Bold } from "@expo-google-fonts/sen";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
+import * as NavigationBar from "expo-navigation-bar";
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_WEB_ID,
@@ -52,6 +53,15 @@ export default function RootLayout() {
   }, [user, initializing, segments, router]);
 
   useEffect(() => {
+    const removeNavBar = async () => {
+      await NavigationBar.setPositionAsync("absolute");
+      await NavigationBar.setBackgroundColorAsync("#ffffff00");
+      await NavigationBar.setButtonStyleAsync("dark");
+    };
+    removeNavBar();
+  }, []);
+
+  useEffect(() => {
     if (loaded && !initializing) {
       SplashScreen.hideAsync();
     }
@@ -60,9 +70,11 @@ export default function RootLayout() {
   if (!loaded || initializing) return null;
 
   return (
-    <ThemeProvider>
-      <RootLayoutNav />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <RootLayoutNav />
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
 

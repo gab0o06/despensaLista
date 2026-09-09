@@ -9,13 +9,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function TabLayout() {
   const { colors } = useTheme();
   const styles = getStyles(colors);
-  const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarLabelVisibilityMode: "unlabeled",
-        tabBarStyle: [styles.tabBar, { paddingBottom: insets.bottom }],
+        tabBarStyle: styles.tabBar,
         animation: "fade",
         tabBarHideOnKeyboard: true,
       }}
@@ -83,8 +82,8 @@ const getStyles = (colors: typeof Colors.dark) =>
   StyleSheet.create({
     tabBar: {
       backgroundColor: colors.barMenu,
-      height: 70,
       position: "absolute",
+      height: 70,
       bottom: 0,
       borderTopWidth: 0,
       borderTopLeftRadius: 20,
@@ -92,7 +91,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-evenly",
-      alignItems: "flex-end",
+      alignItems: "center",
     },
     activeDot: {
       width: 6,
