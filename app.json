@@ -16,7 +16,6 @@
     "ios": {
       "bundleIdentifier": "com.despensalista.app",
       "supportsTablet": true
-      // "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "package": "com.despensalista.app",

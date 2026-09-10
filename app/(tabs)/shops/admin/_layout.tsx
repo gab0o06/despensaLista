@@ -1,12 +1,11 @@
 import { Stack } from "expo-router";
 
-export default function ShopsLayout() {
+export default function AdminShopLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="delete" />
       <Stack.Screen name="index" />
-      <Stack.Screen name="[id]" />
-      <Stack.Screen name="admin" />
-      <Stack.Screen name="create" />
+      <Stack.Screen name="edit" />
     </Stack>
   );
 }

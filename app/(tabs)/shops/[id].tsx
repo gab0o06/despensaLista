@@ -144,6 +144,7 @@ export default function ShopTemplateInfo() {
             route={route}
             pathEdit={`/(tabs)/shops/edit?id=${shopId}`}
             pathDelete={`/(tabs)/shops/delete?id=${shopId}`}
+            redirectAction={`/(tabs)/shops/admin?id=${shopId}`}
           />
         </View>
         <View style={{ gap: 20 }}>

@@ -42,3 +42,6 @@ yarn-error.*
 
 google-services.json
 FIRESTORE_SCHEMA.md
+
+resend.ts
+join.tsx

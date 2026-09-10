@@ -4,9 +4,10 @@ import { useTheme } from "../contexts/ThemeContext";
 
 interface ButtonProps {
   title: string;
-  onPress: () => void;
+  onPress?: () => void;
   backgroundColor?: string;
   textColor?: string;
+  textSize?: number;
   disabled?: boolean;
 }
 
@@ -26,7 +27,7 @@ export const Button = ({
       disabled={disabled}
     >
       <Text
-        style={[styles.primaryButtonText, textColor && { color: textColor }]}
+        style={[styles.primaryButtonText, textColor && { color: textColor }, ,]}
       >
         {title}
       </Text>
@@ -37,10 +38,12 @@ export const Button = ({
 const getStyles = (colors: typeof Colors.dark) =>
   StyleSheet.create({
     primaryButton: {
+      flex: 1,
       backgroundColor: colors.action,
       paddingVertical: 24,
       borderRadius: 8,
       alignItems: "center",
+      justifyContent: "center",
       marginTop: 10,
     },
     primaryButtonText: {

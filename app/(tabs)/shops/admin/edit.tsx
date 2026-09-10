@@ -11,13 +11,13 @@ import {
 } from "react-native";
 import { updateDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
 
-import { Colors } from "../../../constants/theme";
-import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
-import { FormText } from "../../../components/FormText";
-import { Button } from "../../../components/Btn";
-import { auth, db } from "../../../utils/firebase";
-import { categories } from "../../../constants/shopCategories";
-import { useTheme } from "../../../contexts/ThemeContext";
+import { Colors } from "../../../../constants/theme";
+import { HeaderShopsBack } from "../../../../components/HeaderShopsBack";
+import { FormText } from "../../../../components/FormText";
+import { Button } from "../../../../components/Btn";
+import { auth, db } from "../../../../utils/firebase";
+import { categories } from "../../../../constants/shopCategories";
+import { useTheme } from "../../../../contexts/ThemeContext";
 
 export default function EditShop() {
   const [nameShop, setNameShop] = useState("");
@@ -82,6 +82,7 @@ export default function EditShop() {
           const shopDoc = await getDoc(doc(db, "shops", id));
           if (shopDoc.exists()) {
             const shopData = shopDoc.data();
+
             setNameShop(shopData.name || "");
             setCategory(shopData.category || "");
             setDescription(shopData.description || "");

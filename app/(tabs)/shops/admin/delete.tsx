@@ -1,13 +1,13 @@
 import { View, ScrollView, StyleSheet, Text, Alert } from "react-native";
-import { Colors } from "../../../constants/theme";
-import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
-import { Button } from "../../../components/Btn";
+import { Colors } from "../../../../constants/theme";
+import { HeaderShopsBack } from "../../../../components/HeaderShopsBack";
+import { Button } from "../../../../components/Btn";
 
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { auth, db } from "../../../utils/firebase";
+import { auth, db } from "../../../../utils/firebase";
 import { doc, deleteDoc } from "firebase/firestore";
 import { useState } from "react";
-import { useTheme } from "../../../contexts/ThemeContext";
+import { useTheme } from "../../../../contexts/ThemeContext";
 
 export default function DeleteShop() {
   const userId = auth.currentUser?.uid;

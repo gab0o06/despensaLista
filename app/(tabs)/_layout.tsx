@@ -4,7 +4,6 @@ import Feather from "@expo/vector-icons/Feather";
 import * as Haptics from "expo-haptics";
 import { Colors } from "../../constants/theme";
 import { useTheme } from "../../contexts/ThemeContext";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   const { colors } = useTheme();

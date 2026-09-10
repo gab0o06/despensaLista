@@ -59,6 +59,7 @@ export default function CreateShop() {
         description,
         createdAt: serverTimestamp(),
         lastActivity: serverTimestamp(),
+        ownerId: user.uid,
       });
       router.back();
     } catch (error) {
