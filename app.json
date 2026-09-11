@@ -1,15 +1,15 @@
 {
   "expo": {
     "name": "Despensa Lista",
-    "slug": "despensalista",
+    "slug": "despensa",
     "scheme": "despensalista",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/LogoApp.svg",
+    "icon": "./assets/logoApp.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splashImg.png",
+      "image": "./assets/logoApp.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,7 +20,7 @@
     "android": {
       "package": "com.despensalista.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/LogoApp.svg",
+        "foregroundImage": "./assets/logoApp.png",
         "backgroundColor": "#ffffff"
       },
       "googleServicesFile": "./google-services.json",
@@ -28,13 +28,14 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/LogoApp.svg"
+      "favicon": "./assets/logoApp.png"
     },
     "plugins": [
       "expo-font",
       "expo-router",
       "expo-splash-screen",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      "expo-notifications"
     ],
     "extra": {
       "router": {},

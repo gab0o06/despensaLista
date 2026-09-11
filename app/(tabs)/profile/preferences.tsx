@@ -1,9 +1,10 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import { Colors } from "../../../constants/theme";
 import { HeaderShopsBack } from "../../../components/HeaderShopsBack";
 import { ProfileAction } from "../../../components/ProfileAction";
 import { useState } from "react";
 import { useTheme } from "../../../contexts/ThemeContext";
+import * as Notifications from "expo-notifications";
 
 export default function Preferences() {
   const [newOrders, setNewOrders] = useState(false);
@@ -11,6 +12,41 @@ export default function Preferences() {
   const [updates, setUpdates] = useState(false);
   const { colors } = useTheme();
   const styles = getStyles(colors);
+
+  const toggleNotifications = async (value: boolean) => {
+    if (!value) {
+      setInactiveShops(false);
+      await Notifications.cancelAllScheduledNotificationsAsync();
+      return;
+    }
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "Recordatorios",
+      importance: Notifications.AndroidImportance.DEFAULT,
+    });
+
+    const { status } = await Notifications.requestPermissionsAsync();
+
+    if (status !== "granted") {
+      setInactiveShops(false);
+      return Alert.alert(
+        "Permiso denegado",
+        "No se puede activar las notificaciones.",
+      );
+    }
+    await Notifications.cancelAllScheduledNotificationsAsync();
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "🛒 Despensa Lista",
+        body: "Revisa tu lista de compras de hoy!",
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
+        hour: 22,
+        minute: 18,
+      },
+    });
+    setInactiveShops(true);
+  };
 
   return (
     <View style={styles.body}>
@@ -29,10 +65,10 @@ export default function Preferences() {
           />
           <ProfileAction
             icon="bell"
-            nameAction="Shops Inactivas"
+            nameAction="Recordatorio Diario"
             toggle={true}
             value={inactiveShops}
-            onValueChange={setInactiveShops}
+            onValueChange={toggleNotifications}
           />
           <ProfileAction
             icon="userFont"

@@ -96,7 +96,7 @@ const getStyles = (colors: typeof Colors.dark) =>
       justifyContent: "center",
     },
     mainActionName: {
-      fontSize: 24,
+      fontSize: 20,
       color: colors.text,
       fontFamily: "Sen_700Bold",
     },

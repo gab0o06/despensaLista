@@ -9,6 +9,7 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
 import * as NavigationBar from "expo-navigation-bar";
+import * as Notifications from "expo-notifications";
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_WEB_ID,
@@ -16,6 +17,14 @@ GoogleSignin.configure({
 });
 
 SplashScreen.preventAutoHideAsync();
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function RootLayout() {
   const [initializing, setInitializing] = useState(true);
