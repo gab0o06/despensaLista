@@ -85,12 +85,14 @@ export default function UsernameChange() {
           </Text>
         </View>
       </View>
-      <Button
-        title={loading ? "GUARDANDO..." : "GUARDAR"}
-        onPress={handleUsernameChange}
-        backgroundColor={colors.action}
-        disabled={loading}
-      />
+      <View style={{ height: 80 }}>
+        <Button
+          title={loading ? "GUARDANDO..." : "GUARDAR"}
+          onPress={handleUsernameChange}
+          backgroundColor={colors.action}
+          disabled={loading}
+        />
+      </View>
     </View>
   );
 }

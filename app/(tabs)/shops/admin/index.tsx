@@ -4,10 +4,8 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
   Text,
   ActivityIndicator,
-  TextInput,
   Alert,
 } from "react-native";
 import {
@@ -30,6 +28,7 @@ import { auth, db } from "../../../../utils/firebase";
 import { useTheme } from "../../../../contexts/ThemeContext";
 import { Entypo } from "@expo/vector-icons";
 import { MemberShop } from "../../../../components/MemberShop";
+import { InviteMembers } from "../../../../components/InviteMembers";
 
 export default function AdminShop() {
   const [nameShop, setNameShop] = useState("");
@@ -40,7 +39,6 @@ export default function AdminShop() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [invitingMember, setInvitingMember] = useState(false);
-  const [mailInput, setMailInput] = useState("");
   const { colors } = useTheme();
   const styles = getStyles(colors);
 
@@ -48,7 +46,7 @@ export default function AdminShop() {
 
   const router = useRouter();
 
-  const handleInvitation = async () => {
+  const handleInvitation = async (mailInput: string) => {
     if (!mailInput) {
       return Alert.alert("Error", "Por favor ingresa un correo electrónico.");
     }
@@ -75,25 +73,30 @@ export default function AdminShop() {
         return Alert.alert("Error", "El usuario ya es miembro de la tienda.");
 
       const shopRef = doc(db, "shops", id);
-      await updateDoc(shopRef, {
-        members: arrayUnion(querySnapshot.docs[0].id),
-      });
+      try {
+        await updateDoc(shopRef, {
+          members: arrayUnion(querySnapshot.docs[0].id),
+        });
 
-      const productsQuery = query(
-        collection(db, "products"),
-        where("shopId", "==", id),
-      );
-      const productsSnapshot = await getDocs(productsQuery);
-      await Promise.all(
-        productsSnapshot.docs.map(async (productDoc) => {
-          await updateDoc(productDoc.ref, {
-            members: arrayUnion(querySnapshot.docs[0].id),
-          });
-        }),
-      );
+        const productsQuery = query(
+          collection(db, "products"),
+          where("shopId", "==", id),
+          where("members", "array-contains", auth.currentUser?.uid),
+        );
+        const productsSnapshot = await getDocs(productsQuery);
+        await Promise.all(
+          productsSnapshot.docs.map(async (productDoc) => {
+            await updateDoc(productDoc.ref, {
+              members: arrayUnion(querySnapshot.docs[0].id),
+            });
+          }),
+        );
 
-      Alert.alert("Éxito", "Miembro agregado correctamente.");
-      fetchShopData();
+        Alert.alert("Éxito", "Miembro agregado correctamente.");
+        fetchShopData();
+      } catch (err) {
+        console.error("Error adding member:", err);
+      }
     } catch (error) {
       console.error("Error sending invitation:", error);
       Alert.alert(
@@ -102,7 +105,6 @@ export default function AdminShop() {
       );
     } finally {
       setInvitingMember(false);
-      setMailInput("");
     }
   };
 
@@ -133,6 +135,7 @@ export default function AdminShop() {
               const productsQuery = query(
                 collection(db, "products"),
                 where("shopId", "==", id),
+                where("members", "array-contains", auth.currentUser?.uid),
               );
               const productsSnapshot = await getDocs(productsQuery);
               await Promise.all(
@@ -259,6 +262,7 @@ export default function AdminShop() {
           <View style={styles.buttonContainer}>
             <Button
               title="EDITAR"
+              textColor={colors.text}
               onPress={() => {
                 router.push({
                   pathname: "/(tabs)/shops/admin/edit",
@@ -268,6 +272,7 @@ export default function AdminShop() {
             />
             <Button
               title="ELIMINAR"
+              textColor={colors.text}
               backgroundColor={colors.error}
               onPress={() => {
                 router.push({
@@ -280,25 +285,11 @@ export default function AdminShop() {
         </View>
         <View style={styles.inviteMembersContainer}>
           <Text style={styles.inviteMembersText}>Invitar nuevos miembros</Text>
-          <View style={styles.inviteMembersActionContainer}>
-            <View style={styles.searchContainer}>
-              <Entypo name="mail" size={24} color={colors.icons} />
-              <TextInput
-                placeholder="Correo del usuario"
-                style={styles.searchInput}
-                placeholderTextColor={colors.searchText}
-                value={mailInput}
-                onChangeText={setMailInput}
-              />
-            </View>
-            <TouchableOpacity
-              style={styles.primaryButton}
-              onPress={handleInvitation}
-              disabled={invitingMember}
-            >
-              <Text style={styles.primaryButtonText}>INVITAR</Text>
-            </TouchableOpacity>
-          </View>
+          <InviteMembers
+            handleInvitation={handleInvitation}
+            invitingMember={invitingMember}
+            isAdmin={isAdmin}
+          />
         </View>
         <View style={styles.membersContainer}>
           <Text style={styles.membersTitle}>Miembros Tienda</Text>

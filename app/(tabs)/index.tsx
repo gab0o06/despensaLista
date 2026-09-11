@@ -98,6 +98,7 @@ export default function HomeScreen() {
 
       const esProductoHoy = (product: Product) => {
         if (!product) return false;
+        if (product.agotado) return true;
         const recurrence = product.recurrence;
         if (recurrence === "Diaria") return true;
         if (recurrence === "Semanal") return product.diaCompra === dias[hoy];
