@@ -164,7 +164,15 @@ export default function CreateItem() {
             value={quantity}
             onChangeText={(text) => {
               const numericText = text.replace(/[^0-9]/g, "");
-              setQuantity(numericText);
+
+              if (parseInt(numericText) <= 9999) {
+                setQuantity(numericText);
+              } else {
+                Alert.alert(
+                  "Cantidad máxima excedida",
+                  "La cantidad no puede ser mayor a 9999.",
+                );
+              }
             }}
           />
         </View>

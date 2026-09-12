@@ -189,7 +189,16 @@ export default function ItemTemplateInfo() {
         </Text>
         <TouchableOpacity
           style={styles.actionUnit}
-          onPress={() => setQuantity(quantity + 1)}
+          onPress={() => {
+            if (quantity < 999) {
+              setQuantity(quantity + 1);
+            } else {
+              Alert.alert(
+                "Cantidad máxima alcanzada",
+                "No puedes agregar más de 999 unidades.",
+              );
+            }
+          }}
         >
           <Text style={styles.actionUnitText}>+</Text>
         </TouchableOpacity>

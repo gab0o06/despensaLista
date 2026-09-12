@@ -11,7 +11,7 @@ interface DotsActionsProps {
   route: ReturnType<typeof useRouter>;
   pathEdit: Href;
   pathDelete: Href;
-  redirectAction: Href;
+  redirectAction?: Href;
 }
 
 export const DotsActions = ({
@@ -29,7 +29,12 @@ export const DotsActions = ({
       <TouchableOpacity
         style={styles.actionDots}
         activeOpacity={0.7}
-        onPress={() => route.push(redirectAction)}
+
+        onPress={() =>
+          redirectAction
+            ? route.push(redirectAction)
+            : setActiveMoreFunctions(!activeMoreFunctions)
+        }
       >
         <Entypo name="dots-three-horizontal" size={16} color="white" />
       </TouchableOpacity>

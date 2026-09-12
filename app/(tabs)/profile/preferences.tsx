@@ -41,8 +41,8 @@ export default function Preferences() {
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DAILY,
-        hour: 22,
-        minute: 18,
+        hour: 12,
+        minute: 0,
       },
     });
     setInactiveShops(true);

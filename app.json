@@ -5,13 +5,18 @@
     "scheme": "despensalista",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logoApp.png",
+    "icon": "./assets/iconApp.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/logoApp.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#151C21",
+      "light": {
+        "image": "./assets/logoApp.png",
+        "backgroundColor": "#FFFFFF",
+        "resizeMode": "cover"
+      }
     },
     "ios": {
       "bundleIdentifier": "com.despensalista.app",
@@ -20,7 +25,7 @@
     "android": {
       "package": "com.despensalista.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logoApp.png",
+        "foregroundImage": "./assets/iconApp.png",
         "backgroundColor": "#ffffff"
       },
       "googleServicesFile": "./google-services.json",
